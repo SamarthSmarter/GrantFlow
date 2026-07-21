@@ -303,7 +303,7 @@ export async function getOnChainGrants(): Promise<GrantContractState[]> {
         const nativeGrant = await simulateReadOnlyCall(
           config.contractId,
           'get_grant',
-          [nativeToScVal(id)]
+          [nativeToScVal(id, { type: 'string' })]
         );
         
         const status = parseStatus(nativeGrant.status);
@@ -542,12 +542,12 @@ export async function submitGrantContract(
         function: 'submit_grant',
         args: [
           Address.fromString(applicantAddress).toScVal(),
-          nativeToScVal(grantId),
+          nativeToScVal(grantId, { type: 'string' }),
           Address.fromString(params.grantorAddress).toScVal(),
-          nativeToScVal(BigInt(Math.round(parseFloat(params.amount) * 10000000))),
-          nativeToScVal(params.title),
-          nativeToScVal(params.proposal),
-          nativeToScVal(BigInt(Math.floor(new Date(params.milestoneDeadline).getTime() / 1000))),
+          nativeToScVal(BigInt(Math.round(parseFloat(params.amount) * 10000000)), { type: 'i128' }),
+          nativeToScVal(params.title, { type: 'string' }),
+          nativeToScVal(params.proposal, { type: 'string' }),
+          nativeToScVal(BigInt(Math.floor(new Date(params.milestoneDeadline).getTime() / 1000)), { type: 'u64' }),
         ],
       });
 
@@ -696,7 +696,7 @@ export async function releaseMilestoneContract(
         function: 'release_milestone',
         args: [
           Address.fromString(callerAddress).toScVal(),
-          nativeToScVal(grantId),
+          nativeToScVal(grantId, { type: 'string' }),
         ],
       });
 
@@ -820,7 +820,7 @@ export async function rejectGrantContract(
         contract: config.contractId,
         function: 'reject_grant',
         args: [
-          nativeToScVal(grantId),
+          nativeToScVal(grantId, { type: 'string' }),
         ],
       });
 
