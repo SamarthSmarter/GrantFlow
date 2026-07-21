@@ -17,11 +17,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'npm'
 
       - name: Install Node Dependencies
-        run: npm ci --ignore-scripts
+        run: npm install --ignore-scripts
 
       - name: Run Linter (Oxlint)
         run: npm run lint
@@ -38,7 +38,7 @@ jobs:
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: invoicex-frontend-dist
+          name: grantflow-frontend-dist
           path: dist/
 
   contracts:
@@ -66,13 +66,13 @@ jobs:
             ${{ runner.os }}-cargo-
 
       - name: Run Cargo Contract Tests
-        run: cargo test --locked --workspace
+        run: cargo test --workspace
 
       - name: Compile Soroban Contracts to WASM
-        run: cargo build --locked --target wasm32-unknown-unknown --release
+        run: cargo build --target wasm32-unknown-unknown --release
 
       - name: Upload Contract WASM Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: invoicex-contracts-wasm
+          name: grantflow-contracts-wasm
           path: target/wasm32-unknown-unknown/release/*.wasm
