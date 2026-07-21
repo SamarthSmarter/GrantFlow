@@ -9,6 +9,14 @@
   --font-mono: 'JetBrains Mono', monospace;
   --font-dm: 'DM Sans', sans-serif;
 
+  --color-brand-primary: var(--brand-primary);
+  --color-brand-primary-dark: var(--brand-primary-dark);
+  --color-brand-secondary: var(--brand-secondary);
+  --color-brand-dark: var(--brand-dark);
+  --color-brand-border: var(--brand-border);
+  --color-brand-surface: var(--brand-surface);
+  --color-brand-muted: var(--brand-muted);
+
   --animate-fade-in: fade-in 0.2s ease-out;
   --animate-slide-up: slide-up 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   --animate-slide-down: slide-down 0.2s ease-out;
@@ -36,6 +44,11 @@
   --text-base: #09090b;
   --text-muted: #52525b;
 
+  --brand-primary: #f59e0b;
+  --brand-primary-dark: #d97706;
+  --brand-secondary: #71717a;
+  
+  --brand-dark: #09090b;
   --brand-border: #e4e4e7;
   --brand-surface: #f4f4f5;
   --brand-muted: #a1a1aa;
@@ -47,6 +60,11 @@
   --text-base: #fafafa;
   --text-muted: #a1a1aa;
 
+  --brand-primary: #fbbf24;
+  --brand-primary-dark: #f59e0b;
+  --brand-secondary: #a1a1aa;
+
+  --brand-dark: #000000;
   --brand-border: #27272a;
   --brand-surface: #18181b;
   --brand-muted: #52525b;
