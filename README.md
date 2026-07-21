@@ -39,6 +39,9 @@
 ### Automated CI/CD Pipeline
 ![GitHub Actions CI/CD](sub/cicd.png)
 
+### Unit Testing Suite
+![Vitest Passing Output](sub/test.png)
+
 ---
 
 ## What is GrantFlow?
