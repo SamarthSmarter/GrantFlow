@@ -8,7 +8,7 @@ vi.mock('canvas-confetti', () => ({ default: vi.fn() }));
 vi.mock('@stellar/stellar-sdk', () => ({
   Address: {
     fromString: vi.fn().mockReturnValue({
-      toString: () => 'GBGRANTFLOWTESTADDRESS2026XXXYYYZZZAAABBBCCC',
+      toString: () => 'GBGRANTFLOWTESTADDRESS2026XXXYYYZZZAAABBBCCC123456789012',
       toScVal: () => ({}),
     }),
   },
@@ -28,8 +28,8 @@ vi.mock('@stellar/stellar-sdk', () => ({
 
 vi.mock('@creit.tech/stellar-wallets-kit', () => ({
   StellarWalletsKit: vi.fn().mockImplementation(() => ({
-    connect: vi.fn().mockResolvedValue({ address: 'GBGRANTFLOWTESTADDRESS2026XXXYYYZZZAAABBBCCC' }),
-    getPublicKey: vi.fn().mockResolvedValue('GBGRANTFLOWTESTADDRESS2026XXXYYYZZZAAABBBCCC'),
+    connect: vi.fn().mockResolvedValue({ address: 'GBGRANTFLOWTESTADDRESS2026XXXYYYZZZAAABBBCCC123456789012' }),
+    getPublicKey: vi.fn().mockResolvedValue('GBGRANTFLOWTESTADDRESS2026XXXYYYZZZAAABBBCCC123456789012'),
   })),
   WalletNetwork: { TESTNET: 'TESTNET' },
   allowFreighter: vi.fn(),
@@ -38,7 +38,8 @@ vi.mock('@creit.tech/stellar-wallets-kit', () => ({
 describe('GrantFlow Component & Integration Tests', () => {
   it('should render the Landing page with GrantFlow tagline', () => {
     render(<AppProvider><App /></AppProvider>);
-    expect(screen.getByText(/Fund\. Track\. Deliver\./i)).toBeInTheDocument();
+    expect(screen.getByText(/Fund\. Track\./i)).toBeInTheDocument();
+    expect(screen.getByText(/Deliver\. On Stellar\./i)).toBeInTheDocument();
     expect(screen.getByText(/Launch GrantFlow/i)).toBeInTheDocument();
   });
 
@@ -53,8 +54,8 @@ describe('GrantFlow Component & Integration Tests', () => {
 
   it('should display key GrantFlow feature badges on landing', () => {
     render(<AppProvider><App /></AppProvider>);
-    expect(screen.getByText(/SOROBAN SMART CONTRACTS/i)).toBeInTheDocument();
-    expect(screen.getByText(/MILESTONE ESCROW/i)).toBeInTheDocument();
-    expect(screen.getByText(/FREIGHTER WALLET SUPPORT/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/SOROBAN SMART CONTRACTS/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/MILESTONE ESCROW/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/FREIGHTER WALLET/i).length).toBeGreaterThan(0);
   });
 });

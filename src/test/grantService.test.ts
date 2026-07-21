@@ -6,7 +6,7 @@ describe('GrantFlow Service Unit Tests', () => {
     const error = validateGrantInput({
       grantorName: '',
       grantorEmail: 'test@dao.org',
-      grantorAddress: 'GBGRANTFLOWTESTADDRESS2026XXXYYYZZZAAA',
+      grantorAddress: 'GBJCHUKZMTFSLKFBZZERMQZ4RWWQQW2ZZ5D2U462TDKZZX3Q77PZWZ22',
       title: 'Test Grant',
       proposal: 'A test proposal',
       amount: '5000',
@@ -34,7 +34,7 @@ describe('GrantFlow Service Unit Tests', () => {
     const error = validateGrantInput({
       grantorName: 'Stellar DAO',
       grantorEmail: 'grants@dao.org',
-      grantorAddress: 'GBGRANTFLOWTESTADDRESS2026XXXYYYZZZAAABBBCCC',
+      grantorAddress: 'GBJCHUKZMTFSLKFBZZERMQZ4RWWQQW2ZZ5D2U462TDKZZX3Q77PZWZ22',
       title: 'Test Grant',
       proposal: 'A proposal',
       amount: '-100',
@@ -48,7 +48,7 @@ describe('GrantFlow Service Unit Tests', () => {
     const error = validateGrantInput({
       grantorName: 'Stellar DAO',
       grantorEmail: 'grants@dao.org',
-      grantorAddress: 'GBGRANTFLOWTESTADDRESS2026XXXYYYZZZAAABBBCCC',
+      grantorAddress: 'GBJCHUKZMTFSLKFBZZERMQZ4RWWQQW2ZZ5D2U462TDKZZX3Q77PZWZ22',
       title: 'Test Grant',
       proposal: 'A proposal',
       amount: '5000',
