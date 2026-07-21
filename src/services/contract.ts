@@ -564,7 +564,7 @@ export async function submitGrantContract(
         throw new Error(`Simulation failed: ${simResult.error}`);
       }
 
-      const assembledTx = rpc.assembleTransaction(tx, simResult);
+      const assembledTx = rpc.assembleTransaction(tx, simResult).build();
       const signedTxXdr = await signTxWithWallet((assembledTx as any).toXDR(), applicantAddress);
       const finalTx = TransactionBuilder.fromXDR(signedTxXdr, Networks.TESTNET);
       
@@ -713,7 +713,7 @@ export async function releaseMilestoneContract(
         throw new Error(`Simulation failed: ${simResult.error}`);
       }
 
-      const assembledTx = rpc.assembleTransaction(tx, simResult);
+      const assembledTx = rpc.assembleTransaction(tx, simResult).build();
       const signedTxXdr = await signTxWithWallet((assembledTx as any).toXDR(), callerAddress);
       const finalTx = TransactionBuilder.fromXDR(signedTxXdr, Networks.TESTNET);
       
@@ -837,7 +837,7 @@ export async function rejectGrantContract(
         throw new Error(`Simulation failed: ${simResult.error}`);
       }
 
-      const assembledTx = rpc.assembleTransaction(tx, simResult);
+      const assembledTx = rpc.assembleTransaction(tx, simResult).build();
       const signedTxXdr = await signTxWithWallet((assembledTx as any).toXDR(), applicantAddress);
       const finalTx = TransactionBuilder.fromXDR(signedTxXdr, Networks.TESTNET);
       
