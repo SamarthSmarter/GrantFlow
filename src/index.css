@@ -9,22 +9,9 @@
   --font-mono: 'JetBrains Mono', monospace;
   --font-dm: 'DM Sans', sans-serif;
 
-  --color-brand-emerald: var(--brand-emerald);
-  --color-brand-emerald-dark: var(--brand-emerald-dark);
-  --color-brand-emerald-light: var(--brand-emerald-light);
-  --color-brand-amber: var(--brand-amber);
-  --color-brand-amber-dark: var(--brand-amber-dark);
-  --color-brand-teal: var(--brand-teal);
-  --color-brand-dark: var(--brand-dark);
-  --color-brand-border: var(--brand-border);
-  --color-brand-surface: var(--brand-surface);
-  --color-brand-muted: var(--brand-muted);
-
-  --animate-fade-in: fade-in 0.25s ease-out;
-  --animate-slide-up: slide-up 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-  --animate-slide-down: slide-down 0.25s ease-out;
-  --animate-pulse-slow: pulse-slow 3s infinite ease-in-out;
-  --animate-glow: glow-pulse 2.5s infinite ease-in-out;
+  --animate-fade-in: fade-in 0.2s ease-out;
+  --animate-slide-up: slide-up 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-slide-down: slide-down 0.2s ease-out;
 }
 
 @keyframes fade-in {
@@ -33,73 +20,49 @@
 }
 
 @keyframes slide-up {
-  from { transform: translateY(16px); opacity: 0; }
+  from { transform: translateY(12px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
 }
 
 @keyframes slide-down {
-  from { transform: translateY(-16px); opacity: 0; }
+  from { transform: translateY(-12px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
-}
-
-@keyframes pulse-slow {
-  0%, 100% { opacity: 0.3; }
-  50% { opacity: 0.7; }
-}
-
-@keyframes glow-pulse {
-  0%, 100% { box-shadow: 0 0 20px rgba(5, 150, 105, 0.15); }
-  50% { box-shadow: 0 0 40px rgba(5, 150, 105, 0.35); }
 }
 
 :root {
   color-scheme: light dark;
-  --bg-page: #f0faf4;
+  --bg-page: #fafafa;
   --bg-card: #ffffff;
-  --text-base: #0a1f16;
-  --text-muted: #4b7a62;
+  --text-base: #09090b;
+  --text-muted: #52525b;
 
-  --brand-emerald: #10b981;
-  --brand-emerald-dark: #059669;
-  --brand-emerald-light: #d1fae5;
-  --brand-amber: #f59e0b;
-  --brand-amber-dark: #d97706;
-  --brand-teal: #0891b2;
-  --brand-dark: #ffffff;
-  --brand-border: #a7f3d0;
-  --brand-surface: #ecfdf5;
-  --brand-muted: #6ee7b7;
+  --brand-border: #e4e4e7;
+  --brand-surface: #f4f4f5;
+  --brand-muted: #a1a1aa;
 }
 
 .dark {
-  --bg-page: #020c07;
-  --bg-card: #071209;
-  --text-base: #ecfdf5;
-  --text-muted: #6ee7b7;
+  --bg-page: #09090b;
+  --bg-card: #000000;
+  --text-base: #fafafa;
+  --text-muted: #a1a1aa;
 
-  --brand-emerald: #34d399;
-  --brand-emerald-dark: #6ee7b7;
-  --brand-emerald-light: #064e3b;
-  --brand-amber: #fbbf24;
-  --brand-amber-dark: #f59e0b;
-  --brand-teal: #22d3ee;
-  --brand-dark: #071209;
-  --brand-border: #134d2a;
-  --brand-surface: #041509;
-  --brand-muted: #059669;
+  --brand-border: #27272a;
+  --brand-surface: #18181b;
+  --brand-muted: #52525b;
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 4px;
+  height: 4px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
   background: var(--brand-border);
-  border-radius: 3px;
+  border-radius: 2px;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--brand-muted);
@@ -116,32 +79,32 @@ html, body, #root {
   transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
-/* Glassmorphism utility card */
+/* Minimalist panel utility instead of heavy glass */
 .glass-panel {
-  background: rgba(240, 250, 244, 0.75);
-  backdrop-filter: blur(14px);
-  border: 1px solid rgba(10, 31, 22, 0.08);
+  background: var(--bg-card);
+  border: 1px solid var(--brand-border);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 
 .dark .glass-panel {
-  background: rgba(7, 18, 9, 0.88);
-  backdrop-filter: blur(14px);
-  border: 1px solid rgba(52, 211, 153, 0.08);
+  background: var(--bg-card);
+  border: 1px solid var(--brand-border);
+  box-shadow: none;
 }
 
 .ambient-glow {
-  box-shadow: 0 10px 40px -10px rgba(5, 150, 105, 0.18);
+  /* Removed slop glow */
 }
 
 .dark .ambient-glow {
-  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.7), 0 0 30px -10px rgba(52, 211, 153, 0.08);
+  /* Removed slop glow */
 }
 
-/* Grant status badge glow */
+/* Status dots instead of heavy glows */
 .status-glow-active {
-  box-shadow: 0 0 12px rgba(5, 150, 105, 0.3);
+  box-shadow: none;
 }
 
 .status-glow-funded {
-  box-shadow: 0 0 12px rgba(16, 185, 129, 0.3);
+  box-shadow: none;
 }

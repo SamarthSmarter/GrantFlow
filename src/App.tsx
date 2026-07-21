@@ -72,15 +72,15 @@ function ToastsContainer() {
             exit={{ opacity: 0, scale: 0.9, y: -20 }}
             className={`p-4 rounded-xl shadow-lg flex items-start gap-3 border ${
               toast.type === 'success' 
-                ? 'bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-200 dark:border-emerald-800/40' 
+                ? 'bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-950/40 dark:text-amber-200 dark:border-amber-800/40' 
                 : toast.type === 'error'
                 ? 'bg-red-50 text-red-800 border-red-200 dark:bg-red-950/40 dark:text-red-200 dark:border-red-800/40'
-                : 'bg-teal-50 text-teal-800 border-teal-200 dark:bg-teal-950/40 dark:text-teal-200 dark:border-teal-800/40'
+                : 'bg-zinc-50 text-zinc-800 border-zinc-200 dark:bg-zinc-950/40 dark:text-zinc-200 dark:border-zinc-800/40'
             }`}
           >
-            {toast.type === 'success' && <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />}
+            {toast.type === 'success' && <CheckCircle2 className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />}
             {toast.type === 'error' && <XCircle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />}
-            {toast.type === 'info' && <Info className="w-5 h-5 text-teal-500 shrink-0 mt-0.5" />}
+            {toast.type === 'info' && <Info className="w-5 h-5 text-zinc-500 shrink-0 mt-0.5" />}
             <div className="flex-1 text-sm font-dm font-medium leading-relaxed">
               {toast.message}
             </div>
@@ -108,13 +108,13 @@ function TransactionStatusModal() {
       case 'pending':
       case 'processing':
         return (
-          <div className="relative flex items-center justify-center w-16 h-16 rounded-full bg-brand-emerald/10 text-brand-emerald-dark dark:text-brand-emerald">
+          <div className="relative flex items-center justify-center w-16 h-16 rounded-full bg-brand-primary/10 text-brand-primary-dark dark:text-brand-primary">
             <Loader2 className="w-8 h-8 animate-spin" />
           </div>
         );
       case 'success':
         return (
-          <div className="flex items-center justify-center w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400">
+          <div className="flex items-center justify-center w-16 h-16 rounded-full bg-amber-100 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400">
             <CheckCircle2 className="w-10 h-10" />
           </div>
         );
@@ -177,7 +177,7 @@ function TransactionStatusModal() {
                 href={txModal.txHash.startsWith('sandbox_hash_') ? '#' : `https://stellar.expert/explorer/testnet/tx/${txModal.txHash}`}
                 target={txModal.txHash.startsWith('sandbox_hash_') ? '_self' : '_blank'}
                 rel="noreferrer"
-                className="text-xs text-brand-emerald-dark dark:text-brand-emerald hover:underline break-all mt-1 flex items-center gap-1 font-mono"
+                className="text-xs text-brand-primary-dark dark:text-brand-primary hover:underline break-all mt-1 flex items-center gap-1 font-mono"
               >
                 {txModal.txHash}
                 {!txModal.txHash.startsWith('sandbox_hash_') && <ExternalLink className="w-3 h-3 inline" />}
@@ -188,7 +188,7 @@ function TransactionStatusModal() {
           {txModal.grantId && txModal.status === 'success' && (
             <div className="mt-2 w-full p-3 rounded-lg bg-brand-surface/50 dark:bg-brand-dark/50 border border-brand-border/20 text-left">
               <span className="text-xs text-gray-400 block font-mono">GRANT ID</span>
-              <span className="text-xs text-brand-emerald-dark dark:text-brand-emerald font-mono">
+              <span className="text-xs text-brand-primary-dark dark:text-brand-primary font-mono">
                 {txModal.grantId}
               </span>
             </div>
@@ -197,7 +197,7 @@ function TransactionStatusModal() {
           {(txModal.status === 'success' || txModal.status === 'failed' || txModal.status === 'cancelled') && (
             <button
               onClick={closeTxModal}
-              className="mt-6 w-full py-2.5 rounded-xl bg-brand-emerald-dark text-white hover:bg-opacity-90 font-semibold text-sm transition-all"
+              className="mt-6 w-full py-2.5 rounded-xl bg-brand-primary-dark text-white hover:bg-opacity-90 font-semibold text-sm transition-all"
             >
               Dismiss
             </button>
@@ -271,7 +271,7 @@ function WalletModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
         {/* Header */}
         <div className="p-5 border-b border-brand-border/20 dark:border-white/5 flex justify-between items-center bg-brand-surface/30 dark:bg-brand-dark/50">
           <h3 className="text-lg font-sora font-bold text-gray-900 dark:text-white flex items-center gap-2">
-            <Wallet className="w-5 h-5 text-brand-emerald" />
+            <Wallet className="w-5 h-5 text-brand-primary" />
             Wallet Configuration
           </h3>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
@@ -291,12 +291,12 @@ function WalletModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
                 onClick={() => changeNetworkMode('sandbox')}
                 className={`p-3 rounded-xl border text-left flex flex-col gap-1 transition-all ${
                   networkConfig.mode === 'sandbox'
-                    ? 'border-brand-emerald-dark bg-brand-emerald/10 dark:border-brand-emerald dark:bg-brand-emerald/10'
+                    ? 'border-brand-primary-dark bg-brand-primary/10 dark:border-brand-primary dark:bg-brand-primary/10'
                     : 'border-brand-border/30 hover:border-brand-border dark:border-white/5'
                 }`}
               >
                 <div className="text-sm font-semibold flex items-center gap-1.5 dark:text-white">
-                  <Sparkles className="w-4 h-4 text-brand-emerald" />
+                  <Sparkles className="w-4 h-4 text-brand-primary" />
                   GrantFlow Sandbox
                 </div>
                 <span className="text-xs text-gray-500">Test grant flows instantly. No wallet extension needed.</span>
@@ -306,12 +306,12 @@ function WalletModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
                 onClick={() => changeNetworkMode('testnet')}
                 className={`p-3 rounded-xl border text-left flex flex-col gap-1 transition-all ${
                   networkConfig.mode === 'testnet'
-                    ? 'border-brand-teal bg-brand-teal/10 dark:border-brand-teal dark:bg-brand-teal/10'
+                    ? 'border-brand-secondary bg-brand-secondary/10 dark:border-brand-secondary dark:bg-brand-secondary/10'
                     : 'border-brand-border/30 hover:border-brand-border dark:border-white/5'
                 }`}
               >
                 <div className="text-sm font-semibold flex items-center gap-1.5 dark:text-white">
-                  <Globe className="w-4 h-4 text-brand-teal" />
+                  <Globe className="w-4 h-4 text-brand-secondary" />
                   Stellar Testnet
                 </div>
                 <span className="text-xs text-gray-500">Execute real Soroban contracts signed via Freighter.</span>
@@ -331,7 +331,7 @@ function WalletModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
               </div>
               <div>
                 {wallet.isConnected ? (
-                  <span className="px-2.5 py-1 text-xs rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400 font-semibold font-mono">
+                  <span className="px-2.5 py-1 text-xs rounded-full bg-amber-100 text-amber-700 dark:bg-amber-950/40 dark:text-amber-400 font-semibold font-mono">
                     ACTIVE
                   </span>
                 ) : (
@@ -362,7 +362,7 @@ function WalletModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
                 </div>
                 
                 <span className="text-xs text-gray-400 block mt-2 font-mono">ACCOUNT BALANCE</span>
-                <span className="text-lg font-bold font-mono text-brand-emerald-dark dark:text-white">
+                <span className="text-lg font-bold font-mono text-brand-primary-dark dark:text-white">
                   {wallet.balance} XLM
                 </span>
 
@@ -382,7 +382,7 @@ function WalletModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
                     const success = await connectWallet();
                     if (success) onClose();
                   }}
-                  className="flex-1 py-2 rounded-xl bg-brand-emerald-dark text-white hover:bg-opacity-95 text-sm font-semibold transition-all flex items-center justify-center gap-2"
+                  className="flex-1 py-2 rounded-xl bg-brand-primary-dark text-white hover:bg-opacity-95 text-sm font-semibold transition-all flex items-center justify-center gap-2"
                 >
                   <Wallet className="w-4 h-4" />
                   Connect Wallet
@@ -392,7 +392,7 @@ function WalletModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
                   {(!wallet.isAccountActive || networkConfig.mode === 'sandbox') && (
                     <button
                       onClick={fundWalletAccount}
-                      className="py-2 px-4 rounded-xl bg-brand-teal text-white hover:bg-opacity-90 text-sm font-semibold transition-all"
+                      className="py-2 px-4 rounded-xl bg-brand-secondary text-white hover:bg-opacity-90 text-sm font-semibold transition-all"
                     >
                       Fund Wallet
                     </button>
@@ -421,11 +421,11 @@ function WalletModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
                   type="text"
                   value={sandboxAddressInput}
                   onChange={(e) => setSandboxAddressInput(e.target.value)}
-                  className="flex-1 px-3 py-2 text-sm border border-brand-border/30 rounded-lg focus:outline-none focus:border-brand-emerald dark:bg-brand-dark/40 dark:border-white/10 dark:text-white"
+                  className="flex-1 px-3 py-2 text-sm border border-brand-border/30 rounded-lg focus:outline-none focus:border-brand-primary dark:bg-brand-dark/40 dark:border-white/10 dark:text-white"
                 />
                 <button
                   onClick={handleSaveSandboxAddress}
-                  className="px-3 py-2 text-xs rounded-lg bg-brand-emerald-dark text-white hover:bg-opacity-90 font-semibold transition-all"
+                  className="px-3 py-2 text-xs rounded-lg bg-brand-primary-dark text-white hover:bg-opacity-90 font-semibold transition-all"
                 >
                   Apply
                 </button>
@@ -441,7 +441,7 @@ function WalletModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
                   type="text"
                   value={contractIdInput}
                   onChange={(e) => setContractIdInput(e.target.value)}
-                  className="w-full px-3 py-2 text-xs border border-brand-border/30 rounded-lg focus:outline-none focus:border-brand-emerald dark:bg-brand-dark/40 dark:border-white/10 dark:text-white font-mono"
+                  className="w-full px-3 py-2 text-xs border border-brand-border/30 rounded-lg focus:outline-none focus:border-brand-primary dark:bg-brand-dark/40 dark:border-white/10 dark:text-white font-mono"
                 />
               </div>
               <div>
@@ -452,12 +452,12 @@ function WalletModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
                   type="text"
                   value={escrowContractIdInput}
                   onChange={(e) => setEscrowContractIdInput(e.target.value)}
-                  className="w-full px-3 py-2 text-xs border border-brand-border/30 rounded-lg focus:outline-none focus:border-brand-emerald dark:bg-brand-dark/40 dark:border-white/10 dark:text-white font-mono"
+                  className="w-full px-3 py-2 text-xs border border-brand-border/30 rounded-lg focus:outline-none focus:border-brand-primary dark:bg-brand-dark/40 dark:border-white/10 dark:text-white font-mono"
                 />
               </div>
               <button
                 onClick={handleSaveContractIds}
-                className="w-full py-2 text-xs rounded-xl bg-brand-emerald-dark text-white hover:bg-opacity-90 font-semibold transition-all font-mono"
+                className="w-full py-2 text-xs rounded-xl bg-brand-primary-dark text-white hover:bg-opacity-90 font-semibold transition-all font-mono"
               >
                 SAVE CONTRACT CONFIGURATION
               </button>
@@ -511,13 +511,13 @@ function Layout({ children, onOpenWalletModal }: { children: React.ReactNode; on
           onClick={() => navigateTo('landing')}
           className="h-16 border-b border-brand-border/10 dark:border-white/5 flex items-center gap-2 px-6 cursor-pointer"
         >
-          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-brand-emerald to-brand-emerald-dark flex items-center justify-center shrink-0">
+          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-brand-primary to-brand-primary-dark flex items-center justify-center shrink-0">
             <span className="text-white font-sora font-bold text-sm">G</span>
           </div>
-          <span className="font-sora text-xl font-bold bg-gradient-to-r from-brand-emerald-dark to-brand-teal dark:from-brand-emerald dark:to-brand-teal bg-clip-text text-transparent">
+          <span className="font-sora text-xl font-bold bg-gradient-to-r from-brand-primary-dark to-brand-secondary dark:from-brand-primary dark:to-brand-secondary bg-clip-text text-transparent">
             GrantFlow
           </span>
-          <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-brand-emerald/10 text-brand-emerald-dark dark:bg-brand-emerald/20 dark:text-brand-emerald mt-1 font-mono">
+          <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-brand-primary/10 text-brand-primary-dark dark:bg-brand-primary/20 dark:text-brand-primary mt-1 font-mono">
             v1.0
           </span>
         </div>
@@ -527,7 +527,7 @@ function Layout({ children, onOpenWalletModal }: { children: React.ReactNode; on
           <div className="p-3 rounded-xl bg-brand-surface/40 dark:bg-brand-dark/40 border border-brand-border/15">
             <span className="text-[10px] text-gray-400 block font-mono">NETWORK</span>
             <div className="flex items-center gap-1.5 mt-0.5">
-              <span className={`w-2 h-2 rounded-full ${networkConfig.mode === 'testnet' ? 'bg-brand-teal animate-pulse' : 'bg-brand-emerald'}`}></span>
+              <span className={`w-2 h-2 rounded-full ${networkConfig.mode === 'testnet' ? 'bg-brand-secondary animate-pulse' : 'bg-brand-primary'}`}></span>
               <span className="text-xs font-semibold dark:text-white">{networkConfig.mode === 'testnet' ? 'Stellar Testnet' : 'Sandbox'}</span>
             </div>
 
@@ -537,14 +537,14 @@ function Layout({ children, onOpenWalletModal }: { children: React.ReactNode; on
                 <span className="text-xs font-semibold font-mono dark:text-gray-200">
                   {formatAddress(wallet.address)}
                 </span>
-                <span className="text-sm font-bold block font-mono text-brand-emerald-dark dark:text-white mt-1">
+                <span className="text-sm font-bold block font-mono text-brand-primary-dark dark:text-white mt-1">
                   {wallet.balance} XLM
                 </span>
               </div>
             ) : (
               <button 
                 onClick={onOpenWalletModal}
-                className="mt-3 w-full py-1.5 text-xs font-semibold rounded-lg bg-brand-emerald-dark text-white hover:bg-opacity-90 transition-all flex items-center justify-center gap-1"
+                className="mt-3 w-full py-1.5 text-xs font-semibold rounded-lg bg-brand-primary-dark text-white hover:bg-opacity-90 transition-all flex items-center justify-center gap-1"
               >
                 <Wallet className="w-3.5 h-3.5" />
                 Connect Wallet
@@ -564,7 +564,7 @@ function Layout({ children, onOpenWalletModal }: { children: React.ReactNode; on
                 onClick={() => navigateTo(item.id)}
                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all ${
                   isActive
-                    ? 'bg-brand-emerald-dark text-white shadow-md'
+                    ? 'bg-brand-primary-dark text-white shadow-md'
                     : 'text-gray-600 dark:text-gray-400 hover:bg-brand-surface/80 dark:hover:bg-brand-dark/40 hover:text-gray-900 dark:hover:text-white'
                 }`}
               >
@@ -601,10 +601,10 @@ function Layout({ children, onOpenWalletModal }: { children: React.ReactNode; on
           onClick={() => navigateTo('landing')}
           className="flex items-center gap-1.5 cursor-pointer"
         >
-          <div className="w-6 h-6 rounded-md bg-gradient-to-br from-brand-emerald to-brand-emerald-dark flex items-center justify-center">
+          <div className="w-6 h-6 rounded-md bg-gradient-to-br from-brand-primary to-brand-primary-dark flex items-center justify-center">
             <span className="text-white font-sora font-bold text-xs">G</span>
           </div>
-          <span className="font-sora text-xl font-bold bg-gradient-to-r from-brand-emerald-dark to-brand-teal dark:from-brand-emerald dark:to-brand-teal bg-clip-text text-transparent">
+          <span className="font-sora text-xl font-bold bg-gradient-to-r from-brand-primary-dark to-brand-secondary dark:from-brand-primary dark:to-brand-secondary bg-clip-text text-transparent">
             GrantFlow
           </span>
         </div>
@@ -641,13 +641,13 @@ function Layout({ children, onOpenWalletModal }: { children: React.ReactNode; on
                   <span className="text-xs font-semibold dark:text-white">{networkConfig.mode === 'testnet' ? 'Stellar Testnet' : 'Sandbox'}</span>
                 </div>
                 {wallet.isConnected ? (
-                  <span className="text-xs font-bold font-mono text-brand-emerald-dark dark:text-white">
+                  <span className="text-xs font-bold font-mono text-brand-primary-dark dark:text-white">
                     {wallet.balance} XLM
                   </span>
                 ) : (
                   <button 
                     onClick={onOpenWalletModal}
-                    className="py-1 px-2.5 text-xs font-bold rounded-lg bg-brand-emerald-dark text-white hover:bg-opacity-90"
+                    className="py-1 px-2.5 text-xs font-bold rounded-lg bg-brand-primary-dark text-white hover:bg-opacity-90"
                   >
                     Connect
                   </button>
@@ -664,7 +664,7 @@ function Layout({ children, onOpenWalletModal }: { children: React.ReactNode; on
                       onClick={() => navigateTo(item.id)}
                       className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all ${
                         isActive
-                          ? 'bg-brand-emerald-dark text-white shadow-md'
+                          ? 'bg-brand-primary-dark text-white shadow-md'
                           : 'text-gray-600 dark:text-gray-400 hover:bg-brand-surface/80 dark:hover:bg-brand-dark/40 hover:text-gray-900'
                       }`}
                     >
@@ -731,10 +731,10 @@ function LandingPage() {
       {/* Landing Nav */}
       <header className="h-20 max-w-7xl mx-auto w-full px-6 flex items-center justify-between select-none">
         <div className="flex items-center gap-2.5 cursor-pointer">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-emerald to-brand-emerald-dark flex items-center justify-center shadow-lg">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-primary to-brand-primary-dark flex items-center justify-center shadow-lg">
             <span className="text-white font-sora font-bold text-base">G</span>
           </div>
-          <span className="font-sora text-2xl font-extrabold bg-gradient-to-r from-brand-emerald-dark via-brand-emerald to-brand-teal dark:from-brand-emerald dark:to-brand-teal bg-clip-text text-transparent">
+          <span className="font-sora text-2xl font-extrabold bg-gradient-to-r from-brand-primary-dark via-brand-primary to-brand-secondary dark:from-brand-primary dark:to-brand-secondary bg-clip-text text-transparent">
             GrantFlow
           </span>
         </div>
@@ -751,7 +751,7 @@ function LandingPage() {
           {wallet.isConnected ? (
             <button 
               onClick={() => navigateTo('dashboard')}
-              className="px-5 py-2 rounded-xl bg-brand-emerald-dark hover:bg-opacity-95 text-white font-medium text-sm transition-all shadow-md flex items-center gap-1.5"
+              className="px-5 py-2 rounded-xl bg-brand-primary-dark hover:bg-opacity-95 text-white font-medium text-sm transition-all shadow-md flex items-center gap-1.5"
             >
               Enter Dashboard
               <ArrowRight className="w-4 h-4" />
@@ -759,7 +759,7 @@ function LandingPage() {
           ) : (
             <button 
               onClick={() => setWalletModalOpen(true)}
-              className="px-5 py-2 rounded-xl border border-brand-emerald-dark text-brand-emerald-dark dark:border-brand-emerald dark:text-brand-emerald font-semibold text-sm hover:bg-brand-emerald-dark hover:text-white transition-all shadow-sm flex items-center gap-1.5"
+              className="px-5 py-2 rounded-xl border border-brand-primary-dark text-brand-primary-dark dark:border-brand-primary dark:text-brand-primary font-semibold text-sm hover:bg-brand-primary-dark hover:text-white transition-all shadow-sm flex items-center gap-1.5"
             >
               <Wallet className="w-4 h-4" />
               Connect Wallet
@@ -771,13 +771,13 @@ function LandingPage() {
       {/* Hero Section */}
       <section className="max-w-7xl mx-auto w-full px-6 pt-12 pb-20 flex flex-col lg:flex-row items-center gap-16 flex-grow">
         <div className="flex-1 space-y-6 text-left">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-emerald/10 border border-brand-emerald/20 text-brand-emerald-dark dark:text-brand-emerald text-xs font-semibold font-mono">
-            <span className="w-1.5 h-1.5 rounded-full bg-brand-emerald animate-pulse"></span>
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-primary/10 border border-brand-primary/20 text-brand-primary-dark dark:text-brand-primary text-xs font-semibold font-mono">
+            <span className="w-1.5 h-1.5 rounded-full bg-brand-primary animate-pulse"></span>
             LIVE ON STELLAR TESTNET
           </div>
           <h1 className="text-5xl lg:text-6xl font-sora font-extrabold text-gray-900 dark:text-white leading-[1.1] tracking-tight">
             Fund. Track.<br />
-            <span className="bg-gradient-to-r from-brand-emerald-dark to-brand-teal dark:from-brand-emerald dark:to-brand-teal bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-brand-primary-dark to-brand-secondary dark:from-brand-primary dark:to-brand-secondary bg-clip-text text-transparent">
               Deliver. On Stellar.
             </span>
           </h1>
@@ -794,7 +794,7 @@ function LandingPage() {
                   setWalletModalOpen(true);
                 }
               }}
-              className="px-8 py-3.5 rounded-xl bg-brand-emerald-dark text-white hover:bg-opacity-95 font-semibold text-base transition-all shadow-lg ambient-glow flex items-center gap-2"
+              className="px-8 py-3.5 rounded-xl bg-brand-primary-dark text-white hover:bg-opacity-95 font-semibold text-base transition-all shadow-lg ambient-glow flex items-center gap-2"
             >
               Launch GrantFlow
               <ArrowRight className="w-5 h-5" />
@@ -808,9 +808,9 @@ function LandingPage() {
           </div>
 
           <div className="flex flex-wrap items-center gap-6 pt-4 text-xs font-semibold text-gray-400 font-mono">
-            <span className="flex items-center gap-1"><CheckCircle2 className="w-4 h-4 text-brand-emerald" /> SOROBAN SMART CONTRACTS</span>
-            <span className="flex items-center gap-1"><CheckCircle2 className="w-4 h-4 text-brand-emerald" /> FREIGHTER WALLET SUPPORT</span>
-            <span className="flex items-center gap-1"><CheckCircle2 className="w-4 h-4 text-brand-emerald" /> MILESTONE ESCROW</span>
+            <span className="flex items-center gap-1"><CheckCircle2 className="w-4 h-4 text-brand-primary" /> SOROBAN SMART CONTRACTS</span>
+            <span className="flex items-center gap-1"><CheckCircle2 className="w-4 h-4 text-brand-primary" /> FREIGHTER WALLET SUPPORT</span>
+            <span className="flex items-center gap-1"><CheckCircle2 className="w-4 h-4 text-brand-primary" /> MILESTONE ESCROW</span>
           </div>
         </div>
 
@@ -820,13 +820,13 @@ function LandingPage() {
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.15 }}
-            className="p-1 rounded-2xl bg-gradient-to-tr from-brand-emerald/20 via-brand-border/20 to-brand-teal/20 shadow-2xl"
+            className="p-1 rounded-2xl bg-gradient-to-tr from-brand-primary/20 via-brand-border/20 to-brand-secondary/20 shadow-2xl"
           >
             <div className="rounded-xl bg-white dark:bg-brand-dark/95 border border-brand-border/10 p-6 space-y-5">
               {/* Mock Grant header */}
               <div className="flex justify-between items-start border-b border-brand-border/10 pb-4">
                 <div>
-                  <span className="text-[10px] font-bold text-brand-emerald block font-mono">GRANTFLOW PREVIEW</span>
+                  <span className="text-[10px] font-bold text-brand-primary block font-mono">GRANTFLOW PREVIEW</span>
                   <h4 className="text-lg font-sora font-bold text-gray-900 dark:text-white mt-1">Open-Source DeFi Analytics</h4>
                   <span className="text-xs text-gray-400 mt-0.5 block font-mono">ID: grt_dao2026</span>
                 </div>
@@ -851,14 +851,14 @@ function LandingPage() {
               <div className="space-y-2">
                 <div className="flex justify-between text-xs">
                   <span className="text-gray-400 font-mono">MILESTONE PROGRESS</span>
-                  <span className="text-brand-emerald font-mono font-semibold">2 / 3 COMPLETE</span>
+                  <span className="text-brand-primary font-mono font-semibold">2 / 3 COMPLETE</span>
                 </div>
                 <div className="h-2 rounded-full bg-brand-surface dark:bg-brand-dark/60 overflow-hidden">
                   <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: '66%' }}
                     transition={{ delay: 0.4, duration: 0.8 }}
-                    className="h-full rounded-full bg-gradient-to-r from-brand-emerald to-brand-teal"
+                    className="h-full rounded-full bg-gradient-to-r from-brand-primary to-brand-secondary"
                   />
                 </div>
               </div>
@@ -867,9 +867,9 @@ function LandingPage() {
               <div className="p-4 rounded-xl bg-brand-surface/30 dark:bg-brand-dark border border-brand-border/20 flex justify-between items-center">
                 <div>
                   <span className="text-xs text-gray-400 block font-mono">GRANT AMOUNT</span>
-                  <span className="text-xl font-extrabold text-brand-emerald-dark dark:text-white font-mono">8,500.00 XLM</span>
+                  <span className="text-xl font-extrabold text-brand-primary-dark dark:text-white font-mono">8,500.00 XLM</span>
                 </div>
-                <button className="px-4 py-2 rounded-xl bg-brand-emerald-dark text-white font-bold text-xs hover:bg-opacity-90 transition-all flex items-center gap-1 shadow-sm">
+                <button className="px-4 py-2 rounded-xl bg-brand-primary-dark text-white font-bold text-xs hover:bg-opacity-90 transition-all flex items-center gap-1 shadow-sm">
                   <Zap className="w-3.5 h-3.5" />
                   Release Milestone
                 </button>
@@ -879,7 +879,7 @@ function LandingPage() {
               <div>
                 <span className="text-xs text-gray-400 block font-mono mb-2">LIVE EVENT FEED</span>
                 <div className="flex gap-2.5 text-xs text-gray-500">
-                  <span className="w-1.5 h-1.5 rounded-full bg-brand-emerald mt-1.5"></span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-brand-primary mt-1.5"></span>
                   <p className="flex-1 text-left leading-relaxed">
                     <span className="font-semibold text-gray-700 dark:text-gray-300 font-mono">grt_dao2026</span> submitted on-chain. <br />
                     <span className="text-[10px] text-gray-400 font-mono">Tx Hash: sandbox_hash_submit_77ac21...</span>
@@ -904,8 +904,8 @@ function LandingPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="p-6 rounded-2xl bg-brand-surface/30 dark:bg-brand-dark/30 border border-brand-border/20 text-left space-y-4 hover:border-brand-emerald/40 transition-all">
-              <div className="w-10 h-10 rounded-xl bg-brand-emerald/10 flex items-center justify-center text-brand-emerald">
+            <div className="p-6 rounded-2xl bg-brand-surface/30 dark:bg-brand-dark/30 border border-brand-border/20 text-left space-y-4 hover:border-brand-primary/40 transition-all">
+              <div className="w-10 h-10 rounded-xl bg-brand-primary/10 flex items-center justify-center text-brand-primary">
                 <Shield className="w-5 h-5" />
               </div>
               <h3 className="text-lg font-bold dark:text-white">Milestone Escrow</h3>
@@ -914,8 +914,8 @@ function LandingPage() {
               </p>
             </div>
 
-            <div className="p-6 rounded-2xl bg-brand-surface/30 dark:bg-brand-dark/30 border border-brand-border/20 text-left space-y-4 hover:border-brand-emerald/40 transition-all">
-              <div className="w-10 h-10 rounded-xl bg-brand-teal/20 flex items-center justify-center text-brand-teal dark:text-brand-teal">
+            <div className="p-6 rounded-2xl bg-brand-surface/30 dark:bg-brand-dark/30 border border-brand-border/20 text-left space-y-4 hover:border-brand-primary/40 transition-all">
+              <div className="w-10 h-10 rounded-xl bg-brand-secondary/20 flex items-center justify-center text-brand-secondary dark:text-brand-secondary">
                 <Activity className="w-5 h-5" />
               </div>
               <h3 className="text-lg font-bold dark:text-white">On-Chain Transparency</h3>
@@ -924,7 +924,7 @@ function LandingPage() {
               </p>
             </div>
 
-            <div className="p-6 rounded-2xl bg-brand-surface/30 dark:bg-brand-dark/30 border border-brand-border/20 text-left space-y-4 hover:border-brand-emerald/40 transition-all">
+            <div className="p-6 rounded-2xl bg-brand-surface/30 dark:bg-brand-dark/30 border border-brand-border/20 text-left space-y-4 hover:border-brand-primary/40 transition-all">
               <div className="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center text-amber-700 dark:bg-amber-950/40 dark:text-amber-400">
                 <Zap className="w-5 h-5" />
               </div>
@@ -947,19 +947,19 @@ function LandingPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
             <div className="space-y-3 text-center">
-              <span className="w-12 h-12 rounded-full border-2 border-brand-emerald-dark text-brand-emerald-dark dark:border-brand-emerald dark:text-brand-emerald flex items-center justify-center mx-auto text-xl font-bold font-mono">1</span>
+              <span className="w-12 h-12 rounded-full border-2 border-brand-primary-dark text-brand-primary-dark dark:border-brand-primary dark:text-brand-primary flex items-center justify-center mx-auto text-xl font-bold font-mono">1</span>
               <h4 className="text-base font-bold dark:text-white">Connect & Submit</h4>
               <p className="text-xs text-gray-500 dark:text-gray-400 max-w-xs mx-auto leading-relaxed">Link your Freighter wallet or use Sandbox mode. Submit a grant proposal with milestone requirements and funding amount.</p>
             </div>
 
             <div className="space-y-3 text-center">
-              <span className="w-12 h-12 rounded-full border-2 border-brand-emerald-dark text-brand-emerald-dark dark:border-brand-emerald dark:text-brand-emerald flex items-center justify-center mx-auto text-xl font-bold font-mono">2</span>
+              <span className="w-12 h-12 rounded-full border-2 border-brand-primary-dark text-brand-primary-dark dark:border-brand-primary dark:text-brand-primary flex items-center justify-center mx-auto text-xl font-bold font-mono">2</span>
               <h4 className="text-base font-bold dark:text-white">Funds Locked in Escrow</h4>
               <p className="text-xs text-gray-500 dark:text-gray-400 max-w-xs mx-auto leading-relaxed">Grant funds are held in a Soroban milestone escrow contract until milestones are verified by the grantor.</p>
             </div>
 
             <div className="space-y-3 text-center">
-              <span className="w-12 h-12 rounded-full border-2 border-brand-emerald-dark text-brand-emerald-dark dark:border-brand-emerald dark:text-brand-emerald flex items-center justify-center mx-auto text-xl font-bold font-mono">3</span>
+              <span className="w-12 h-12 rounded-full border-2 border-brand-primary-dark text-brand-primary-dark dark:border-brand-primary dark:text-brand-primary flex items-center justify-center mx-auto text-xl font-bold font-mono">3</span>
               <h4 className="text-base font-bold dark:text-white">Milestone Released</h4>
               <p className="text-xs text-gray-500 dark:text-gray-400 max-w-xs mx-auto leading-relaxed">Upon milestone approval, XLM is disbursed to the applicant's wallet atomically on-chain. No trust needed.</p>
             </div>
@@ -1038,7 +1038,7 @@ function DashboardPage({ onOpenWalletModal }: { onOpenWalletModal: () => void })
           )}
           <button
             onClick={() => navigateTo('create-grant')}
-            className="px-4 py-2 bg-brand-emerald-dark text-white hover:bg-opacity-95 font-semibold text-xs rounded-xl transition-all shadow-md flex items-center gap-1.5"
+            className="px-4 py-2 bg-brand-primary-dark text-white hover:bg-opacity-95 font-semibold text-xs rounded-xl transition-all shadow-md flex items-center gap-1.5"
           >
             <Plus className="w-4 h-4" />
             Submit Grant
@@ -1089,17 +1089,17 @@ function DashboardPage({ onOpenWalletModal }: { onOpenWalletModal: () => void })
             {!wallet.isConnected ? (
               <button 
                 onClick={onOpenWalletModal}
-                className="py-1.5 px-4 bg-brand-emerald-dark text-white rounded-lg font-semibold text-xs hover:bg-opacity-95"
+                className="py-1.5 px-4 bg-brand-primary-dark text-white rounded-lg font-semibold text-xs hover:bg-opacity-95"
               >
                 Connect Freighter
               </button>
             ) : (
               <div className="flex gap-2">
-                <span className="px-2 py-0.5 text-[10px] font-bold rounded-lg bg-emerald-100 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400 font-mono">
+                <span className="px-2 py-0.5 text-[10px] font-bold rounded-lg bg-amber-100 text-amber-700 dark:bg-amber-950/40 dark:text-amber-400 font-mono">
                   CONNECTED
                 </span>
                 {wallet.isAccountActive ? (
-                  <span className="px-2 py-0.5 text-[10px] font-bold rounded-lg bg-teal-100 text-teal-700 dark:bg-teal-950/40 dark:text-teal-400 font-mono">
+                  <span className="px-2 py-0.5 text-[10px] font-bold rounded-lg bg-zinc-100 text-zinc-700 dark:bg-zinc-950/40 dark:text-zinc-400 font-mono">
                     ON-CHAIN ACTIVE
                   </span>
                 ) : (
@@ -1117,7 +1117,7 @@ function DashboardPage({ onOpenWalletModal }: { onOpenWalletModal: () => void })
           <div>
             <span className="text-[10px] text-gray-400 font-bold block font-mono">AVAILABLE BALANCE</span>
             <div className="mt-3 flex items-baseline gap-2">
-              <span className="text-3xl font-extrabold text-brand-emerald-dark dark:text-white font-mono">
+              <span className="text-3xl font-extrabold text-brand-primary-dark dark:text-white font-mono">
                 {wallet.isConnected ? wallet.balance : '0.0000'}
               </span>
               <span className="text-xs text-gray-500 font-bold font-mono">XLM</span>
@@ -1125,7 +1125,7 @@ function DashboardPage({ onOpenWalletModal }: { onOpenWalletModal: () => void })
             <span className="text-[10px] text-gray-400 block mt-1">Stellar Native Gas Token</span>
           </div>
           <div className="text-[10px] text-gray-400 flex items-center gap-1 font-mono border-t border-brand-border/10 pt-2">
-            <RefreshCw className="w-3 h-3 text-brand-emerald" />
+            <RefreshCw className="w-3 h-3 text-brand-primary" />
             AUTO-REFRESH EVERY 5S
           </div>
         </div>
@@ -1142,7 +1142,7 @@ function DashboardPage({ onOpenWalletModal }: { onOpenWalletModal: () => void })
             <span className="text-[10px] text-gray-400 font-mono">STATUS: DEPLOYED</span>
             <button 
               onClick={onOpenWalletModal}
-              className="text-[10px] text-brand-emerald-dark dark:text-brand-emerald hover:underline font-bold font-mono"
+              className="text-[10px] text-brand-primary-dark dark:text-brand-primary hover:underline font-bold font-mono"
             >
               CHANGE ID
             </button>
@@ -1163,7 +1163,7 @@ function DashboardPage({ onOpenWalletModal }: { onOpenWalletModal: () => void })
         </div>
         <div className="p-4 bg-white dark:bg-brand-dark border border-brand-border/15 rounded-2xl shadow-sm">
           <span className="text-[10px] text-gray-400 block font-mono">TOTAL DISBURSED</span>
-          <span className="text-2xl font-bold font-mono text-brand-emerald-dark dark:text-emerald-400 mt-1 block">{totalDisbursed} XLM</span>
+          <span className="text-2xl font-bold font-mono text-brand-primary-dark dark:text-amber-400 mt-1 block">{totalDisbursed} XLM</span>
         </div>
         <div className="p-4 bg-white dark:bg-brand-dark border border-brand-border/15 rounded-2xl shadow-sm">
           <span className="text-[10px] text-gray-400 block font-mono">PENDING AMOUNT</span>
@@ -1180,7 +1180,7 @@ function DashboardPage({ onOpenWalletModal }: { onOpenWalletModal: () => void })
             <h3 className="text-lg font-sora font-bold text-gray-900 dark:text-white">Recent Grant Applications</h3>
             <button 
               onClick={() => navigateTo('grants')}
-              className="text-xs text-brand-emerald-dark dark:text-brand-emerald hover:underline font-semibold"
+              className="text-xs text-brand-primary-dark dark:text-brand-primary hover:underline font-semibold"
             >
               View All Grants
             </button>
@@ -1198,12 +1198,12 @@ function DashboardPage({ onOpenWalletModal }: { onOpenWalletModal: () => void })
                 <div 
                   key={grant.id}
                   onClick={() => navigateTo('grant-details', grant.id)}
-                  className="p-3.5 rounded-xl border border-brand-border/15 hover:border-brand-emerald/30 dark:border-white/5 dark:hover:bg-brand-dark/40 cursor-pointer flex justify-between items-center transition-all bg-brand-surface/10"
+                  className="p-3.5 rounded-xl border border-brand-border/15 hover:border-brand-primary/30 dark:border-white/5 dark:hover:bg-brand-dark/40 cursor-pointer flex justify-between items-center transition-all bg-brand-surface/10"
                 >
                   <div className="flex items-center gap-3">
                     <div className={`p-2 rounded-lg ${
                       grant.status === 'funded' 
-                        ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/20 dark:text-emerald-400' 
+                        ? 'bg-amber-50 text-amber-600 dark:bg-amber-950/20 dark:text-amber-400' 
                         : grant.status === 'rejected'
                         ? 'bg-red-50 text-red-600 dark:bg-red-950/20 dark:text-red-400'
                         : 'bg-amber-50 text-amber-600 dark:bg-amber-950/20 dark:text-amber-400'
@@ -1223,7 +1223,7 @@ function DashboardPage({ onOpenWalletModal }: { onOpenWalletModal: () => void })
                     </span>
                     <span className={`text-[10px] font-bold font-mono px-2 py-0.5 rounded-full inline-block mt-1 ${
                       grant.status === 'funded'
-                        ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-400'
+                        ? 'bg-amber-50 text-amber-700 dark:bg-amber-950/30 dark:text-amber-400'
                         : grant.status === 'rejected'
                         ? 'bg-red-50 text-red-700 dark:bg-red-950/30 dark:text-red-400'
                         : 'bg-amber-50 text-amber-700 dark:bg-amber-950/30 dark:text-amber-400'
@@ -1250,11 +1250,11 @@ function DashboardPage({ onOpenWalletModal }: { onOpenWalletModal: () => void })
               {activityFeed.map((item) => (
                 <div key={item.id} className="flex gap-3">
                   <span className={`w-1.5 h-1.5 rounded-full mt-2 shrink-0 ${
-                    item.type === 'milestone_released' ? 'bg-brand-emerald' 
+                    item.type === 'milestone_released' ? 'bg-brand-primary' 
                     : item.type === 'grant_rejected' ? 'bg-red-400'
                     : item.type === 'tx_failed' ? 'bg-red-400'
                     : item.type === 'tx_processing' ? 'bg-amber-400 animate-pulse'
-                    : 'bg-brand-teal'
+                    : 'bg-brand-secondary'
                   }`}></span>
                   <div>
                     <p className="text-xs font-semibold dark:text-white">{item.title}</p>
@@ -1335,7 +1335,7 @@ function CreateGrantPage() {
         {/* Grantor Information */}
         <div className="p-6 rounded-2xl bg-white dark:bg-brand-dark border border-brand-border/20 shadow-sm space-y-4">
           <h3 className="text-base font-sora font-bold text-gray-900 dark:text-white flex items-center gap-2">
-            <User className="w-4 h-4 text-brand-emerald" />
+            <User className="w-4 h-4 text-brand-primary" />
             Grantor / Funder Information
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1346,7 +1346,7 @@ function CreateGrantPage() {
                 value={formData.grantorName}
                 onChange={(e) => handleChange('grantorName', e.target.value)}
                 placeholder="e.g. Stellar Community DAO"
-                className="w-full px-3 py-2.5 text-sm border border-brand-border/30 rounded-xl focus:outline-none focus:border-brand-emerald dark:bg-brand-dark/40 dark:border-white/10 dark:text-white placeholder-gray-400"
+                className="w-full px-3 py-2.5 text-sm border border-brand-border/30 rounded-xl focus:outline-none focus:border-brand-primary dark:bg-brand-dark/40 dark:border-white/10 dark:text-white placeholder-gray-400"
                 required
               />
             </div>
@@ -1357,7 +1357,7 @@ function CreateGrantPage() {
                 value={formData.grantorEmail}
                 onChange={(e) => handleChange('grantorEmail', e.target.value)}
                 placeholder="grants@organization.org"
-                className="w-full px-3 py-2.5 text-sm border border-brand-border/30 rounded-xl focus:outline-none focus:border-brand-emerald dark:bg-brand-dark/40 dark:border-white/10 dark:text-white placeholder-gray-400"
+                className="w-full px-3 py-2.5 text-sm border border-brand-border/30 rounded-xl focus:outline-none focus:border-brand-primary dark:bg-brand-dark/40 dark:border-white/10 dark:text-white placeholder-gray-400"
                 required
               />
             </div>
@@ -1369,7 +1369,7 @@ function CreateGrantPage() {
               value={formData.grantorAddress}
               onChange={(e) => handleChange('grantorAddress', e.target.value)}
               placeholder="GBXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-              className="w-full px-3 py-2.5 text-sm border border-brand-border/30 rounded-xl focus:outline-none focus:border-brand-emerald dark:bg-brand-dark/40 dark:border-white/10 dark:text-white placeholder-gray-400 font-mono"
+              className="w-full px-3 py-2.5 text-sm border border-brand-border/30 rounded-xl focus:outline-none focus:border-brand-primary dark:bg-brand-dark/40 dark:border-white/10 dark:text-white placeholder-gray-400 font-mono"
               required
             />
           </div>
@@ -1378,7 +1378,7 @@ function CreateGrantPage() {
         {/* Grant Details */}
         <div className="p-6 rounded-2xl bg-white dark:bg-brand-dark border border-brand-border/20 shadow-sm space-y-4">
           <h3 className="text-base font-sora font-bold text-gray-900 dark:text-white flex items-center gap-2">
-            <BookOpen className="w-4 h-4 text-brand-emerald" />
+            <BookOpen className="w-4 h-4 text-brand-primary" />
             Grant Proposal Details
           </h3>
           <div>
@@ -1388,7 +1388,7 @@ function CreateGrantPage() {
               value={formData.title}
               onChange={(e) => handleChange('title', e.target.value)}
               placeholder="e.g. Open-Source DeFi Analytics Dashboard for Soroban"
-              className="w-full px-3 py-2.5 text-sm border border-brand-border/30 rounded-xl focus:outline-none focus:border-brand-emerald dark:bg-brand-dark/40 dark:border-white/10 dark:text-white placeholder-gray-400"
+              className="w-full px-3 py-2.5 text-sm border border-brand-border/30 rounded-xl focus:outline-none focus:border-brand-primary dark:bg-brand-dark/40 dark:border-white/10 dark:text-white placeholder-gray-400"
               required
             />
           </div>
@@ -1399,7 +1399,7 @@ function CreateGrantPage() {
               onChange={(e) => handleChange('proposal', e.target.value)}
               placeholder="Describe your project, what problem it solves, your approach, and expected deliverables..."
               rows={5}
-              className="w-full px-3 py-2.5 text-sm border border-brand-border/30 rounded-xl focus:outline-none focus:border-brand-emerald dark:bg-brand-dark/40 dark:border-white/10 dark:text-white placeholder-gray-400 resize-none"
+              className="w-full px-3 py-2.5 text-sm border border-brand-border/30 rounded-xl focus:outline-none focus:border-brand-primary dark:bg-brand-dark/40 dark:border-white/10 dark:text-white placeholder-gray-400 resize-none"
               required
             />
           </div>
@@ -1408,7 +1408,7 @@ function CreateGrantPage() {
         {/* Funding & Milestones */}
         <div className="p-6 rounded-2xl bg-white dark:bg-brand-dark border border-brand-border/20 shadow-sm space-y-4">
           <h3 className="text-base font-sora font-bold text-gray-900 dark:text-white flex items-center gap-2">
-            <Target className="w-4 h-4 text-brand-emerald" />
+            <Target className="w-4 h-4 text-brand-primary" />
             Funding & Milestones
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1421,7 +1421,7 @@ function CreateGrantPage() {
                 value={formData.amount}
                 onChange={(e) => handleChange('amount', e.target.value)}
                 placeholder="e.g. 5000"
-                className="w-full px-3 py-2.5 text-sm border border-brand-border/30 rounded-xl focus:outline-none focus:border-brand-emerald dark:bg-brand-dark/40 dark:border-white/10 dark:text-white placeholder-gray-400"
+                className="w-full px-3 py-2.5 text-sm border border-brand-border/30 rounded-xl focus:outline-none focus:border-brand-primary dark:bg-brand-dark/40 dark:border-white/10 dark:text-white placeholder-gray-400"
                 required
               />
             </div>
@@ -1431,7 +1431,7 @@ function CreateGrantPage() {
                 type="date"
                 value={formData.milestoneDeadline}
                 onChange={(e) => handleChange('milestoneDeadline', e.target.value)}
-                className="w-full px-3 py-2.5 text-sm border border-brand-border/30 rounded-xl focus:outline-none focus:border-brand-emerald dark:bg-brand-dark/40 dark:border-white/10 dark:text-white"
+                className="w-full px-3 py-2.5 text-sm border border-brand-border/30 rounded-xl focus:outline-none focus:border-brand-primary dark:bg-brand-dark/40 dark:border-white/10 dark:text-white"
                 required
               />
             </div>
@@ -1443,7 +1443,7 @@ function CreateGrantPage() {
               onChange={(e) => handleChange('milestoneRequirements', e.target.value)}
               placeholder="Describe the milestones that must be completed for funds to be released, e.g. M1: Design doc (Week 4). M2: MVP (Week 8). M3: Launch (Week 12)."
               rows={3}
-              className="w-full px-3 py-2.5 text-sm border border-brand-border/30 rounded-xl focus:outline-none focus:border-brand-emerald dark:bg-brand-dark/40 dark:border-white/10 dark:text-white placeholder-gray-400 resize-none"
+              className="w-full px-3 py-2.5 text-sm border border-brand-border/30 rounded-xl focus:outline-none focus:border-brand-primary dark:bg-brand-dark/40 dark:border-white/10 dark:text-white placeholder-gray-400 resize-none"
             />
           </div>
         </div>
@@ -1452,7 +1452,7 @@ function CreateGrantPage() {
         <button
           type="submit"
           disabled={isSubmitting || !wallet.isConnected}
-          className="w-full py-4 rounded-2xl bg-brand-emerald-dark text-white font-semibold text-base hover:bg-opacity-95 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg ambient-glow flex items-center justify-center gap-2"
+          className="w-full py-4 rounded-2xl bg-brand-primary-dark text-white font-semibold text-base hover:bg-opacity-95 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg ambient-glow flex items-center justify-center gap-2"
         >
           {isSubmitting ? (
             <>
@@ -1521,7 +1521,7 @@ function GrantsPage() {
         </div>
         <button
           onClick={() => navigateTo('create-grant')}
-          className="px-4 py-2 bg-brand-emerald-dark text-white hover:bg-opacity-95 font-semibold text-xs rounded-xl transition-all shadow-md flex items-center gap-1.5"
+          className="px-4 py-2 bg-brand-primary-dark text-white hover:bg-opacity-95 font-semibold text-xs rounded-xl transition-all shadow-md flex items-center gap-1.5"
         >
           <Plus className="w-4 h-4" />
           New Application
@@ -1537,13 +1537,13 @@ function GrantsPage() {
             value={search}
             onChange={(e) => { setSearch(e.target.value); setCurrentPageNum(1); }}
             placeholder="Search grant title, grantor, or ID..."
-            className="w-full pl-9 pr-3 py-2 text-sm border border-brand-border/30 rounded-xl focus:outline-none focus:border-brand-emerald dark:bg-brand-dark dark:border-white/10 dark:text-white placeholder-gray-400"
+            className="w-full pl-9 pr-3 py-2 text-sm border border-brand-border/30 rounded-xl focus:outline-none focus:border-brand-primary dark:bg-brand-dark dark:border-white/10 dark:text-white placeholder-gray-400"
           />
         </div>
         <select
           value={filterStatus}
           onChange={(e) => setFilterStatus(e.target.value as any)}
-          className="px-3 py-2 text-sm border border-brand-border/30 rounded-xl focus:outline-none focus:border-brand-emerald dark:bg-brand-dark dark:border-white/10 dark:text-white"
+          className="px-3 py-2 text-sm border border-brand-border/30 rounded-xl focus:outline-none focus:border-brand-primary dark:bg-brand-dark dark:border-white/10 dark:text-white"
         >
           <option value="all">All Status</option>
           <option value="pending">Pending</option>
@@ -1574,13 +1574,13 @@ function GrantsPage() {
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               onClick={() => navigateTo('grant-details', grant.id)}
-              className="p-4 rounded-2xl bg-white dark:bg-brand-dark border border-brand-border/15 dark:border-white/5 cursor-pointer hover:border-brand-emerald/30 dark:hover:bg-brand-dark/50 transition-all shadow-sm"
+              className="p-4 rounded-2xl bg-white dark:bg-brand-dark border border-brand-border/15 dark:border-white/5 cursor-pointer hover:border-brand-primary/30 dark:hover:bg-brand-dark/50 transition-all shadow-sm"
             >
               <div className="flex items-center justify-between gap-4">
                 <div className="flex items-center gap-3 flex-1 min-w-0">
                   <div className={`p-2 rounded-xl shrink-0 ${
                     grant.status === 'funded' 
-                      ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/20 dark:text-emerald-400' 
+                      ? 'bg-amber-50 text-amber-600 dark:bg-amber-950/20 dark:text-amber-400' 
                       : grant.status === 'rejected'
                       ? 'bg-red-50 text-red-600 dark:bg-red-950/20 dark:text-red-400'
                       : 'bg-amber-50 text-amber-600 dark:bg-amber-950/20 dark:text-amber-400'
@@ -1608,7 +1608,7 @@ function GrantsPage() {
                   </span>
                   <span className={`text-[10px] font-bold font-mono px-2 py-0.5 rounded-full inline-block mt-1 ${
                     grant.status === 'funded'
-                      ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-400'
+                      ? 'bg-amber-50 text-amber-700 dark:bg-amber-950/30 dark:text-amber-400'
                       : grant.status === 'rejected'
                       ? 'bg-red-50 text-red-700 dark:bg-red-950/30 dark:text-red-400'
                       : 'bg-amber-50 text-amber-700 dark:bg-amber-950/30 dark:text-amber-400'
@@ -1677,7 +1677,7 @@ function GrantDetailPage() {
       <div className="flex flex-col items-center justify-center py-20 text-center">
         <AlertCircle className="w-12 h-12 text-gray-300 dark:text-gray-700 mb-3" />
         <p className="text-base font-dm text-gray-400">Grant application not found</p>
-        <button onClick={() => navigateTo('grants')} className="mt-4 text-brand-emerald-dark hover:underline text-sm">
+        <button onClick={() => navigateTo('grants')} className="mt-4 text-brand-primary-dark hover:underline text-sm">
           Back to Grants
         </button>
       </div>
@@ -1714,7 +1714,7 @@ function GrantDetailPage() {
         </div>
         <span className={`ml-auto px-3 py-1 text-xs font-bold rounded-full font-mono ${
           grant.status === 'funded'
-            ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400'
+            ? 'bg-amber-100 text-amber-700 dark:bg-amber-950/40 dark:text-amber-400'
             : grant.status === 'rejected'
             ? 'bg-red-100 text-red-700 dark:bg-red-950/40 dark:text-red-400'
             : 'bg-amber-100 text-amber-700 dark:bg-amber-950/40 dark:text-amber-400'
@@ -1742,7 +1742,7 @@ function GrantDetailPage() {
           </div>
           <div>
             <span className="text-[10px] text-gray-400 block font-mono">GRANT AMOUNT</span>
-            <span className="text-xl font-extrabold text-brand-emerald-dark dark:text-white font-mono">{parseFloat(grant.amount).toFixed(2)} XLM</span>
+            <span className="text-xl font-extrabold text-brand-primary-dark dark:text-white font-mono">{parseFloat(grant.amount).toFixed(2)} XLM</span>
           </div>
           <div className="col-span-2">
             <span className="text-[10px] text-gray-400 block font-mono">GRANTOR ADDRESS</span>
@@ -1771,7 +1771,7 @@ function GrantDetailPage() {
               href={grant.txHash.startsWith('sandbox_hash_') ? '#' : `https://stellar.expert/explorer/testnet/tx/${grant.txHash}`}
               target={grant.txHash.startsWith('sandbox_hash_') ? '_self' : '_blank'}
               rel="noreferrer"
-              className="text-xs text-brand-emerald-dark dark:text-brand-emerald hover:underline break-all font-mono flex items-center gap-1"
+              className="text-xs text-brand-primary-dark dark:text-brand-primary hover:underline break-all font-mono flex items-center gap-1"
             >
               {grant.txHash}
               {!grant.txHash.startsWith('sandbox_hash_') && <ExternalLink className="w-3 h-3" />}
@@ -1784,7 +1784,7 @@ function GrantDetailPage() {
                 href={grant.releaseTxHash.startsWith('sandbox_hash_') ? '#' : `https://stellar.expert/explorer/testnet/tx/${grant.releaseTxHash}`}
                 target={grant.releaseTxHash.startsWith('sandbox_hash_') ? '_self' : '_blank'}
                 rel="noreferrer"
-                className="text-xs text-brand-emerald-dark dark:text-brand-emerald hover:underline break-all font-mono flex items-center gap-1"
+                className="text-xs text-brand-primary-dark dark:text-brand-primary hover:underline break-all font-mono flex items-center gap-1"
               >
                 {grant.releaseTxHash}
                 {!grant.releaseTxHash.startsWith('sandbox_hash_') && <ExternalLink className="w-3 h-3" />}
@@ -1806,7 +1806,7 @@ function GrantDetailPage() {
           <button
             onClick={handleRelease}
             disabled={isActioning}
-            className="flex-1 py-3.5 rounded-2xl bg-brand-emerald-dark text-white font-semibold hover:bg-opacity-95 disabled:opacity-50 transition-all shadow-lg flex items-center justify-center gap-2"
+            className="flex-1 py-3.5 rounded-2xl bg-brand-primary-dark text-white font-semibold hover:bg-opacity-95 disabled:opacity-50 transition-all shadow-lg flex items-center justify-center gap-2"
           >
             {isActioning ? <Loader2 className="w-5 h-5 animate-spin" /> : <Zap className="w-5 h-5" />}
             Release Milestone Funds
@@ -1850,9 +1850,9 @@ function MilestonesPage() {
   };
 
   const getTypeColor = (type: string) => {
-    if (type === 'release') return 'text-emerald-600 dark:text-emerald-400';
+    if (type === 'release') return 'text-amber-600 dark:text-amber-400';
     if (type === 'reject') return 'text-red-500 dark:text-red-400';
-    return 'text-brand-teal dark:text-brand-teal';
+    return 'text-brand-secondary dark:text-brand-secondary';
   };
 
   return (
@@ -1874,12 +1874,12 @@ function MilestonesPage() {
             <div key={tx.id} className="p-4 rounded-2xl bg-white dark:bg-brand-dark border border-brand-border/15 dark:border-white/5 shadow-sm flex items-center justify-between gap-4">
               <div className="flex items-center gap-3 flex-1 min-w-0">
                 <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                  tx.status === 'success' ? 'bg-emerald-50 dark:bg-emerald-950/20' 
+                  tx.status === 'success' ? 'bg-amber-50 dark:bg-amber-950/20' 
                   : tx.status === 'failed' ? 'bg-red-50 dark:bg-red-950/20'
                   : tx.status === 'processing' ? 'bg-amber-50 dark:bg-amber-950/20'
                   : 'bg-gray-50 dark:bg-gray-900/20'
                 }`}>
-                  {tx.status === 'success' && <CheckCircle2 className="w-4 h-4 text-emerald-500" />}
+                  {tx.status === 'success' && <CheckCircle2 className="w-4 h-4 text-amber-500" />}
                   {tx.status === 'failed' && <XCircle className="w-4 h-4 text-red-500" />}
                   {tx.status === 'processing' && <Loader2 className="w-4 h-4 text-amber-500 animate-spin" />}
                   {(tx.status === 'pending' || tx.status === 'cancelled') && <Clock className="w-4 h-4 text-gray-400" />}
@@ -1892,7 +1892,7 @@ function MilestonesPage() {
               <div className="text-right shrink-0">
                 <p className="text-sm font-bold font-mono dark:text-white">{parseFloat(tx.amount).toFixed(2)} XLM</p>
                 <p className={`text-[10px] font-mono font-bold ${
-                  tx.status === 'success' ? 'text-emerald-600 dark:text-emerald-400'
+                  tx.status === 'success' ? 'text-amber-600 dark:text-amber-400'
                   : tx.status === 'failed' ? 'text-red-500'
                   : 'text-amber-500'
                 }`}>{tx.status.toUpperCase()}</p>
@@ -1913,12 +1913,12 @@ function NotFoundPage() {
   const { navigateTo } = useGrantFlow();
   return (
     <div className="flex flex-col items-center justify-center py-24 text-center">
-      <span className="text-6xl font-sora font-extrabold text-brand-emerald/20 dark:text-brand-emerald/10">404</span>
+      <span className="text-6xl font-sora font-extrabold text-brand-primary/20 dark:text-brand-primary/10">404</span>
       <p className="mt-4 text-lg font-sora font-bold text-gray-900 dark:text-white">Page Not Found</p>
       <p className="text-sm text-gray-400 mt-2">The page you're looking for doesn't exist.</p>
       <button 
         onClick={() => navigateTo('landing')}
-        className="mt-6 px-6 py-2.5 rounded-xl bg-brand-emerald-dark text-white font-semibold text-sm hover:bg-opacity-95 transition-all"
+        className="mt-6 px-6 py-2.5 rounded-xl bg-brand-primary-dark text-white font-semibold text-sm hover:bg-opacity-95 transition-all"
       >
         Return Home
       </button>
