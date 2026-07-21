@@ -22,6 +22,25 @@
 
 ---
 
+## 🔗 Links & Demo
+- **Live Deployment**: [grantflow-stellar.netlify.app](https://grantflow-stellar.netlify.app/)
+- **Video Demo**: [Watch on Google Drive](https://drive.google.com/file/d/1BPdLxAAMljsIEpeTDBp3-8TLdnyG-HFe/view?usp=sharing)
+
+## 📸 Gallery
+
+### Desktop Interface
+![Dashboard UI](sub/ui1.png)
+
+![Application Flow](sub/ui2.png)
+
+### Mobile Interface
+<img src="sub/mobui.png" width="300" alt="Mobile UI" />
+
+### Automated CI/CD Pipeline
+![GitHub Actions CI/CD](sub/cicd.png)
+
+---
+
 ## What is GrantFlow?
 
 **GrantFlow** is a decentralized, non-custodial grant registry and milestone escrow system built on top of the Stellar Network and powered by Soroban smart contracts. It bridges DAO treasury workflows with cryptographic milestone networks, allowing developers, creators, and protocols to deploy on-chain grant applications, receive native token funding via atomic contracts, and track deliverables trustlessly.
