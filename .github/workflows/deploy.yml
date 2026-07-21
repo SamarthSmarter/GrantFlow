@@ -1,0 +1,64 @@
+name: Continuous Deployment
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    name: Package and Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Build Web Application
+        run: npm run build
+
+      - name: Setup Rust Toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+          targets: wasm32-unknown-unknown
+
+      - name: Compile Contracts
+        run: cargo build --locked --target wasm32-unknown-unknown --release
+
+      - name: Verify Contract WASM Files
+        run: |
+          ls -la target/wasm32-unknown-unknown/release/invoice_registry.wasm
+          ls -la target/wasm32-unknown-unknown/release/payment_manager.wasm
+          echo "WASM contract artifacts validated successfully."
+
+      - name: Validate Deployment Package
+        run: |
+          if [ ! -d "dist" ]; then
+            echo "Error: Frontend dist directory is missing!"
+            exit 1
+          fi
+          if [ ! -f "dist/index.html" ]; then
+            echo "Error: dist/index.html is missing!"
+            exit 1
+          fi
+          echo "Deployment package verified successfully."
+
+      - name: Archive Production Frontend Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: invoicex-dist
+          path: dist/
+
+      - name: Archive Smart Contract WASM Binaries
+        uses: actions/upload-artifact@v4
+        with:
+          name: invoicex-contracts-wasm
+          path: target/wasm32-unknown-unknown/release/*.wasm

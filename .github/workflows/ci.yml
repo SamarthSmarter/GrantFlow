@@ -1,0 +1,78 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  frontend:
+    name: Frontend Build, Lint & Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Node Dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Run Linter (Oxlint)
+        run: npm run lint
+
+      - name: Run TypeScript Compiler Check
+        run: npm run typecheck
+
+      - name: Run Frontend Tests
+        run: npm run test
+
+      - name: Build Frontend Application
+        run: npm run build
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: invoicex-frontend-dist
+          path: dist/
+
+  contracts:
+    name: Soroban Contract Build & Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Rust Toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+          targets: wasm32-unknown-unknown
+
+      - name: Cache Cargo Dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Run Cargo Contract Tests
+        run: cargo test --locked --workspace
+
+      - name: Compile Soroban Contracts to WASM
+        run: cargo build --locked --target wasm32-unknown-unknown --release
+
+      - name: Upload Contract WASM Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: invoicex-contracts-wasm
+          path: target/wasm32-unknown-unknown/release/*.wasm
