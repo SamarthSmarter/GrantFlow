@@ -3,6 +3,9 @@ resolver = "2"
 members = [
     "contracts/grant_registry",
     "contracts/milestone_escrow",
+    "contracts/dispute_resolver",
+    "contracts/invoice_registry",
+    "contracts/payment_manager",
 ]
 
 [profile.release]
