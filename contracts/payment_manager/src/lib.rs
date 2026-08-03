@@ -3,37 +3,37 @@ use soroban_sdk::{
     contract, contractimpl, contracttype, Address, Env, String, Symbol
 };
 
-/// Grant status enum — mirrors the GrantRegistry XDR schema
+/// Invoice status enum — mirrors the InvoiceRegistry XDR schema
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 #[contracttype]
-pub enum GrantStatus {
-    Pending = 0,
-    Funded = 1,
-    Rejected = 2,
+pub enum InvoiceStatus {
+    Created = 0,
+    Paid = 1,
+    Cancelled = 2,
 }
 
-/// Grant structure — mirrors the GrantRegistry XDR schema
+/// Invoice structure — mirrors the InvoiceRegistry XDR schema
 #[derive(Clone, Debug, Eq, PartialEq)]
 #[contracttype]
-pub struct Grant {
+pub struct Invoice {
     pub id: String,
-    pub applicant: Address,
-    pub grantor: Address,
+    pub creator: Address,
+    pub client: Address,
     pub amount: i128,            // Amount in Stroops (1 XLM = 10_000_000 stroops)
     pub title: String,
-    pub proposal: String,
-    pub milestone_deadline: u64, // Unix epoch timestamp
-    pub status: GrantStatus,
+    pub description: String,
+    pub due_date: u64,           // Unix epoch timestamp
+    pub status: InvoiceStatus,
 }
 
-/// Client interface for GrantRegistry contract-to-contract calls
-#[soroban_sdk::contractclient(name = "GrantRegistryClient")]
-pub trait GrantRegistryClientTrait {
-    fn get_grant(env: Env, id: String) -> Grant;
-    fn set_funded(env: Env, caller: Address, id: String);
+/// Client interface for InvoiceRegistry contract-to-contract calls
+#[soroban_sdk::contractclient(name = "InvoiceRegistryClient")]
+pub trait InvoiceRegistryClientTrait {
+    fn get_invoice(env: Env, id: String) -> Invoice;
+    fn set_paid(env: Env, caller: Address, id: String);
 }
 
-/// Storage keys for MilestoneEscrow
+/// Storage keys for PaymentManager
 #[derive(Clone)]
 #[contracttype]
 pub enum DataKey {
@@ -42,20 +42,21 @@ pub enum DataKey {
     Registry,
 }
 
-/// GrantFlow Milestone Escrow Contract
+/// GrantFlow Payment Manager Contract
 ///
-/// Orchestrates milestone-based fund releases for the GrantFlow protocol.
-/// On `release_milestone`, it:
-///   1. Reads grant details from the GrantRegistry via C2C call
-///   2. Transfers XLM from the escrow caller to the applicant via Stellar Asset Contract
-///   3. Updates the grant status to Funded in the GrantRegistry via C2C call
-///   4. Emits a `milestone_released` event for indexers
+/// Orchestrates invoice-based payments for the GrantFlow protocol.
+/// On `pay_invoice`, it:
+///   1. Reads invoice details from the InvoiceRegistry via C2C call
+///   2. Validates the caller is the designated client
+///   3. Transfers XLM from the client to the invoice creator via SAC
+///   4. Updates the invoice status to Paid in the InvoiceRegistry via C2C call
+///   5. Emits a `payment_processed` event for indexers
 #[contract]
-pub struct MilestoneEscrow;
+pub struct PaymentManager;
 
 #[contractimpl]
-impl MilestoneEscrow {
-    /// Initialize the MilestoneEscrow with admin, native token, and registry addresses.
+impl PaymentManager {
+    /// Initialize the PaymentManager with admin, native token, and registry addresses.
     /// Can only be called once.
     pub fn initialize(env: Env, admin: Address, token: Address, registry: Address) {
         if env.storage().instance().has(&DataKey::Admin) {
@@ -76,25 +77,27 @@ impl MilestoneEscrow {
         env.storage().instance().get(&DataKey::Token).unwrap()
     }
 
-    /// Returns the registered GrantRegistry contract address.
+    /// Returns the registered InvoiceRegistry contract address.
     pub fn get_registry(env: Env) -> Address {
         env.storage().instance().get(&DataKey::Registry).unwrap()
     }
 
-    /// Release milestone funds for a grant application.
+    /// Pay an invoice.
     ///
     /// Arguments:
-    /// - `caller`: The address authorizing the release (must be admin or grantor)
-    /// - `grant_id`: The unique grant identifier (e.g. "grt_abc123")
+    /// - `caller`: The address paying the invoice (must be the designated client)
+    /// - `invoice_id`: The unique invoice identifier
     ///
     /// Flow:
     /// 1. Authenticates caller
-    /// 2. Fetches grant details from GrantRegistry (C2C)
-    /// 3. Validates grant is in Pending status
-    /// 4. Transfers XLM from caller to applicant via SAC
-    /// 5. Updates grant status to Funded in GrantRegistry (C2C)
-    /// 6. Emits `milestone_released` event
-    pub fn release_milestone(env: Env, caller: Address, grant_id: String) {
+    /// 2. Fetches invoice details from InvoiceRegistry (C2C)
+    /// 3. Validates caller is the designated client
+    /// 4. Validates invoice is in Created status
+    /// 5. Validates amount is positive
+    /// 6. Transfers XLM from caller to invoice creator via SAC
+    /// 7. Updates invoice status to Paid in InvoiceRegistry (C2C)
+    /// 8. Emits `payment_processed` event
+    pub fn pay_invoice(env: Env, caller: Address, invoice_id: String) {
         // Authenticate the caller
         caller.require_auth();
 
@@ -103,26 +106,36 @@ impl MilestoneEscrow {
 
         // Instantiate clients for cross-contract calls
         let token_client = soroban_sdk::token::Client::new(&env, &token_addr);
-        let registry_client = GrantRegistryClient::new(&env, &registry_addr);
+        let registry_client = InvoiceRegistryClient::new(&env, &registry_addr);
 
-        // Fetch grant details from GrantRegistry (Contract-to-Contract Call)
-        let grant: Grant = registry_client.get_grant(&grant_id);
+        // Fetch invoice details from InvoiceRegistry (Contract-to-Contract Call)
+        let invoice: Invoice = registry_client.get_invoice(&invoice_id);
 
-        // Validate grant status is Pending
-        if grant.status != GrantStatus::Pending {
-            panic!("grant is not in pending status");
+        // Validate caller is the designated client for this invoice
+        if caller != invoice.client {
+            panic!("caller is not the designated client");
         }
 
-        // Transfer XLM from caller to grant applicant (Stellar Asset Contract)
-        token_client.transfer(&caller, &grant.applicant, &grant.amount);
+        // Validate invoice status is Created
+        if invoice.status != InvoiceStatus::Created {
+            panic!("invoice status is not Created");
+        }
 
-        // Update GrantRegistry status to Funded (Contract-to-Contract Call)
-        registry_client.set_funded(&env.current_contract_address(), &grant_id);
+        // Validate amount is positive (defense in depth)
+        if invoice.amount <= 0 {
+            panic!("invoice amount must be positive");
+        }
 
-        // Emit milestone release event for indexers
+        // Transfer XLM from caller to invoice creator (Stellar Asset Contract)
+        token_client.transfer(&caller, &invoice.creator, &invoice.amount);
+
+        // Update InvoiceRegistry status to Paid (Contract-to-Contract Call)
+        registry_client.set_paid(&env.current_contract_address(), &invoice_id);
+
+        // Emit payment processed event for indexers
         env.events().publish(
-            (Symbol::new(&env, "milestone_released"), grant_id.clone(), caller.clone()),
-            (grant.applicant.clone(), grant.amount),
+            (Symbol::new(&env, "payment_processed"), invoice_id.clone(), caller.clone()),
+            (invoice.creator.clone(), invoice.amount),
         );
     }
 }
