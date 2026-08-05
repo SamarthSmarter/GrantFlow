@@ -96,6 +96,12 @@ impl GrantRegistry {
             panic!("grant amount must be positive");
         }
 
+        // Deadline must be in the future
+        let now = env.ledger().timestamp();
+        if milestone_deadline <= now {
+            panic!("milestone deadline must be in the future");
+        }
+
         let key = DataKey::Grant(id.clone());
         if env.storage().persistent().has(&key) {
             panic!("grant already exists with this ID");
@@ -148,6 +154,37 @@ impl GrantRegistry {
             .unwrap_or(Vec::new(&env))
     }
 
+    /// Returns the total count of registered grants.
+    pub fn get_grant_count(env: Env) -> u32 {
+        let list: Vec<String> = env
+            .storage()
+            .persistent()
+            .get(&DataKey::GrantList)
+            .unwrap_or(Vec::new(&env));
+        list.len()
+    }
+
+    /// Retrieve all grant IDs filtered by a specific status.
+    ///
+    /// Arguments:
+    /// - `status`: The GrantStatus to filter by (Pending = 0, Funded = 1, Rejected = 2)
+    pub fn get_grants_by_status(env: Env, status: GrantStatus) -> Vec<String> {
+        let all_ids: Vec<String> = Self::get_all_grants(env.clone());
+        let mut filtered = Vec::new(&env);
+
+        for i in 0..all_ids.len() {
+            let id = all_ids.get(i).unwrap();
+            let key = DataKey::Grant(id.clone());
+            if let Some(grant) = env.storage().persistent().get::<DataKey, Grant>(&key) {
+                if grant.status == status {
+                    filtered.push_back(id);
+                }
+            }
+        }
+
+        filtered
+    }
+
     /// Mark a grant as Funded (transition: Pending → Funded).
     ///
     /// Restricted to the registered MilestoneEscrow contract address.
@@ -180,6 +217,41 @@ impl GrantRegistry {
         );
     }
 
+    /// Check if a grant's milestone deadline has passed.
+    ///
+    /// Returns true if the milestone_deadline is before the current ledger timestamp
+    /// and the grant is still in Pending status.
+    pub fn is_overdue(env: Env, id: String) -> bool {
+        let key = DataKey::Grant(id);
+        if !env.storage().persistent().has(&key) {
+            panic!("grant not found");
+        }
+        let grant: Grant = env.storage().persistent().get(&key).unwrap();
+        let now = env.ledger().timestamp();
+        grant.status == GrantStatus::Pending && grant.milestone_deadline < now
+    }
+
+    /// Retrieve all grant IDs whose milestone deadline has passed and are still Pending.
+    ///
+    /// Useful for off-chain indexers and DAO governance tooling to flag overdue grants.
+    pub fn get_overdue_grants(env: Env) -> Vec<String> {
+        let all_ids: Vec<String> = Self::get_all_grants(env.clone());
+        let mut overdue = Vec::new(&env);
+        let now = env.ledger().timestamp();
+
+        for i in 0..all_ids.len() {
+            let id = all_ids.get(i).unwrap();
+            let key = DataKey::Grant(id.clone());
+            if let Some(grant) = env.storage().persistent().get::<DataKey, Grant>(&key) {
+                if grant.status == GrantStatus::Pending && grant.milestone_deadline < now {
+                    overdue.push_back(id);
+                }
+            }
+        }
+
+        overdue
+    }
+
     /// Withdraw / reject a grant application (transition: Pending → Rejected).
     ///
     /// Only the original applicant may withdraw their own application.
@@ -208,3 +280,4 @@ impl GrantRegistry {
 }
 
 mod test;
+
