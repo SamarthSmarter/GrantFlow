@@ -2,16 +2,16 @@
 use super::*;
 use soroban_sdk::testutils::{Address as _, Events};
 use soroban_sdk::{vec, Env, Address, String, Symbol, IntoVal};
-use invoice_registry::{InvoiceRegistry, InvoiceRegistryClient as RegistryContractClient, InvoiceStatus as RegistryInvoiceStatus};
+use grant_registry::{GrantRegistry, GrantRegistryClient as RegistryContractClient, GrantStatus as RegistryGrantStatus};
 
 #[test]
-fn test_successful_c2c_payment() {
+fn test_successful_milestone_release() {
     let env = Env::default();
     env.mock_all_auths();
 
     let admin = Address::generate(&env);
-    let client = Address::generate(&env);
-    let creator = Address::generate(&env);
+    let applicant = Address::generate(&env);
+    let grantor = Address::generate(&env);
 
     // Register token contract (Stellar Asset Contract)
     let sac = env.register_stellar_asset_contract_v2(admin.clone());
@@ -19,150 +19,92 @@ fn test_successful_c2c_payment() {
     let token_client = soroban_sdk::token::Client::new(&env, &token_addr);
     let sac_client = soroban_sdk::token::StellarAssetClient::new(&env, &token_addr);
 
-    // Register registry contract
-    let registry_addr = env.register_contract(None, InvoiceRegistry);
+    // Register escrow contract
+    let escrow_addr = env.register_contract(None, MilestoneEscrow);
+    let escrow_client = MilestoneEscrowClient::new(&env, &escrow_addr);
+
+    // Register grant registry contract
+    let registry_addr = env.register_contract(None, GrantRegistry);
     let registry_client = RegistryContractClient::new(&env, &registry_addr);
 
-    // Register payment manager contract
-    let payment_mgr_addr = env.register_contract(None, PaymentManager);
-    let payment_mgr_client = PaymentManagerClient::new(&env, &payment_mgr_addr);
+    // Initialize contracts — registry needs the escrow address
+    registry_client.initialize(&admin, &escrow_addr);
+    escrow_client.initialize(&admin, &token_addr, &registry_addr);
 
-    // Initialize contracts
-    registry_client.initialize(&admin, &payment_mgr_addr);
-    payment_mgr_client.initialize(&admin, &token_addr, &registry_addr);
+    // Submit a grant via the registry
+    let grant_id = String::from_str(&env, "grt_release");
+    let amount: i128 = 5000_0000000; // 5000 XLM
 
-    // Setup invoice details
-    let invoice_id = String::from_str(&env, "INV-100");
-    let amount = 100_0000000; // 100 XLM
-    
-    registry_client.create_invoice(
-        &creator,
-        &invoice_id,
-        &client,
+    registry_client.submit_grant(
+        &applicant,
+        &grant_id,
+        &grantor,
         &amount,
-        &String::from_str(&env, "Server Setup"),
-        &String::from_str(&env, "Deploying cloud instances"),
+        &String::from_str(&env, "Test Project"),
+        &String::from_str(&env, "Milestone release test"),
         &1900000000,
     );
 
-    // Mint tokens to client to pay
-    sac_client.mint(&client, &amount);
-    assert_eq!(token_client.balance(&client), amount);
-    assert_eq!(token_client.balance(&creator), 0);
+    // Mint tokens to grantor so they can fund the milestone
+    sac_client.mint(&grantor, &amount);
+    assert_eq!(token_client.balance(&grantor), amount);
+    assert_eq!(token_client.balance(&applicant), 0);
 
-    // Execute Payment via PaymentManager (Client pays)
-    payment_mgr_client.pay_invoice(&client, &invoice_id);
+    // Release milestone (grantor pays applicant)
+    escrow_client.release_milestone(&grantor, &grant_id);
 
     // Verify balances changed
-    assert_eq!(token_client.balance(&client), 0);
-    assert_eq!(token_client.balance(&creator), amount);
+    assert_eq!(token_client.balance(&grantor), 0);
+    assert_eq!(token_client.balance(&applicant), amount);
 
-    // Verify status changed in Registry to Paid
-    let invoice = registry_client.get_invoice(&invoice_id);
-    assert_eq!(invoice.status, RegistryInvoiceStatus::Paid);
-
-    // Verify events emitted
-    let events = env.events().all();
-    let payment_event = events.last().unwrap();
-    assert_eq!(
-        payment_event.1,
-        vec![
-            &env,
-            Symbol::new(&env, "payment_processed").into_val(&env),
-            invoice_id.into_val(&env),
-            client.into_val(&env)
-        ]
-    );
+    // Verify grant status changed to Funded in Registry
+    let grant = registry_client.get_grant(&grant_id);
+    assert_eq!(grant.status, RegistryGrantStatus::Funded);
 }
 
 #[test]
-#[should_panic(expected = "caller is not the designated client")]
-fn test_unauthorized_payment_client() {
+#[should_panic(expected = "grant is not in pending status")]
+fn test_double_release_fails() {
     let env = Env::default();
     env.mock_all_auths();
 
     let admin = Address::generate(&env);
-    let client = Address::generate(&env);
-    let creator = Address::generate(&env);
-    let attacker = Address::generate(&env);
+    let applicant = Address::generate(&env);
+    let grantor = Address::generate(&env);
 
     let sac = env.register_stellar_asset_contract_v2(admin.clone());
     let token_addr = sac.address();
     let sac_client = soroban_sdk::token::StellarAssetClient::new(&env, &token_addr);
 
-    let registry_addr = env.register_contract(None, InvoiceRegistry);
+    let escrow_addr = env.register_contract(None, MilestoneEscrow);
+    let escrow_client = MilestoneEscrowClient::new(&env, &escrow_addr);
+
+    let registry_addr = env.register_contract(None, GrantRegistry);
     let registry_client = RegistryContractClient::new(&env, &registry_addr);
 
-    let payment_mgr_addr = env.register_contract(None, PaymentManager);
-    let payment_mgr_client = PaymentManagerClient::new(&env, &payment_mgr_addr);
+    registry_client.initialize(&admin, &escrow_addr);
+    escrow_client.initialize(&admin, &token_addr, &registry_addr);
 
-    registry_client.initialize(&admin, &payment_mgr_addr);
-    payment_mgr_client.initialize(&admin, &token_addr, &registry_addr);
+    let grant_id = String::from_str(&env, "grt_double");
+    let amount: i128 = 1000_0000000;
 
-    let invoice_id = String::from_str(&env, "INV-101");
-    let amount = 100_0000000;
-    
-    registry_client.create_invoice(
-        &creator,
-        &invoice_id,
-        &client,
+    registry_client.submit_grant(
+        &applicant,
+        &grant_id,
+        &grantor,
         &amount,
-        &String::from_str(&env, "Server Setup"),
-        &String::from_str(&env, "Deploying cloud instances"),
+        &String::from_str(&env, "Double Release Test"),
+        &String::from_str(&env, "Should fail on second release"),
         &1900000000,
     );
 
-    sac_client.mint(&attacker, &amount);
+    sac_client.mint(&grantor, &(amount * 2));
 
-    // Attacker tries to pay invoice belonging to client
-    payment_mgr_client.pay_invoice(&attacker, &invoice_id);
-}
+    // First release should succeed
+    escrow_client.release_milestone(&grantor, &grant_id);
 
-#[test]
-#[should_panic(expected = "invoice status is not Created")]
-fn test_double_payment_fails() {
-    let env = Env::default();
-    env.mock_all_auths();
-
-    let admin = Address::generate(&env);
-    let client = Address::generate(&env);
-    let creator = Address::generate(&env);
-
-    let sac = env.register_stellar_asset_contract_v2(admin.clone());
-    let token_addr = sac.address();
-    let token_client = soroban_sdk::token::Client::new(&env, &token_addr);
-    let sac_client = soroban_sdk::token::StellarAssetClient::new(&env, &token_addr);
-
-    let registry_addr = env.register_contract(None, InvoiceRegistry);
-    let registry_client = RegistryContractClient::new(&env, &registry_addr);
-
-    let payment_mgr_addr = env.register_contract(None, PaymentManager);
-    let payment_mgr_client = PaymentManagerClient::new(&env, &payment_mgr_addr);
-
-    registry_client.initialize(&admin, &payment_mgr_addr);
-    payment_mgr_client.initialize(&admin, &token_addr, &registry_addr);
-
-    let invoice_id = String::from_str(&env, "INV-102");
-    let amount = 100_0000000;
-    
-    registry_client.create_invoice(
-        &creator,
-        &invoice_id,
-        &client,
-        &amount,
-        &String::from_str(&env, "Server Setup"),
-        &String::from_str(&env, "Deploying cloud instances"),
-        &1900000000,
-    );
-
-    sac_client.mint(&client, &(amount * 2));
-    assert_eq!(token_client.balance(&client), amount * 2);
-
-    // Pay first time
-    payment_mgr_client.pay_invoice(&client, &invoice_id);
-
-    // Pay second time (should panic because invoice status is Paid)
-    payment_mgr_client.pay_invoice(&client, &invoice_id);
+    // Second release should panic
+    escrow_client.release_milestone(&grantor, &grant_id);
 }
 
 #[test]
@@ -173,9 +115,26 @@ fn test_double_initialization_fails() {
     let token = Address::generate(&env);
     let registry = Address::generate(&env);
 
-    let payment_mgr_addr = env.register_contract(None, PaymentManager);
-    let payment_mgr_client = PaymentManagerClient::new(&env, &payment_mgr_addr);
+    let escrow_addr = env.register_contract(None, MilestoneEscrow);
+    let escrow_client = MilestoneEscrowClient::new(&env, &escrow_addr);
 
-    payment_mgr_client.initialize(&admin, &token, &registry);
-    payment_mgr_client.initialize(&admin, &token, &registry);
+    escrow_client.initialize(&admin, &token, &registry);
+    escrow_client.initialize(&admin, &token, &registry);
+}
+
+#[test]
+fn test_getter_functions() {
+    let env = Env::default();
+    let admin = Address::generate(&env);
+    let token = Address::generate(&env);
+    let registry = Address::generate(&env);
+
+    let escrow_addr = env.register_contract(None, MilestoneEscrow);
+    let escrow_client = MilestoneEscrowClient::new(&env, &escrow_addr);
+
+    escrow_client.initialize(&admin, &token, &registry);
+
+    assert_eq!(escrow_client.get_admin(), admin);
+    assert_eq!(escrow_client.get_token(), token);
+    assert_eq!(escrow_client.get_registry(), registry);
 }
