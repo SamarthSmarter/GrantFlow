@@ -43,7 +43,7 @@ export function validateAmount(amount: string): string | null {
   }
 
   const parsed = parseFloat(trimmed);
-  if (isNaN(parsed)) {
+  if (isNaN(parsed) || !isFinite(parsed)) {
     return 'Amount must be a valid number';
   }
 
@@ -65,25 +65,30 @@ export function validateAmount(amount: string): string | null {
 }
 
 /**
- * Sanitize a text input string by trimming and removing dangerous characters
+ * Sanitize a text input string by trimming and removing dangerous characters.
+ * Also strips CSV formula injection characters (=, +, -, @) at the start of the string.
  */
 export function sanitizeInput(input: string): string {
   if (!input || typeof input !== 'string') return '';
   return input
     .trim()
-    .replace(/[<>]/g, '') // Strip angle brackets to prevent XSS
-    .replace(/\0/g, '');   // Strip null bytes
+    .replace(/[<>]/g, '')      // Strip angle brackets to prevent XSS
+    .replace(/\0/g, '')        // Strip null bytes
+    .replace(/^[=+\-@]/, ''); // Prevent CSV formula injection
 }
 
 /**
  * Validate a Unix timestamp or ISO date string
- * Returns true if the date is valid and in the future
+ * Returns true if the date is valid and in the future.
+ * Rejects dates more than 10 years in the future (likely a data-entry error).
  */
 export function isValidFutureDate(dateStr: string): boolean {
   if (!dateStr) return false;
   const date = new Date(dateStr);
   if (isNaN(date.getTime())) return false;
-  return date.getTime() > Date.now();
+  const now = Date.now();
+  const tenYearsMs = 10 * 365.25 * 24 * 60 * 60 * 1000;
+  return date.getTime() > now && date.getTime() < now + tenYearsMs;
 }
 
 /**
