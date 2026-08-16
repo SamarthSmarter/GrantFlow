@@ -19,7 +19,7 @@ jobs:
           cache: 'npm'
 
       - name: Install Dependencies
-        run: npm install --ignore-scripts
+        run: npm ci --ignore-scripts
 
       - name: Build Web Application
         run: npm run build
@@ -30,6 +30,9 @@ jobs:
           toolchain: stable
           targets: wasm32-unknown-unknown
 
+      - name: Run Smart Contract Tests
+        run: cargo test
+
       - name: Compile Contracts
         run: cargo build --target wasm32-unknown-unknown --release
 
@@ -37,6 +40,9 @@ jobs:
         run: |
           ls -la target/wasm32-unknown-unknown/release/grant_registry.wasm
           ls -la target/wasm32-unknown-unknown/release/milestone_escrow.wasm
+          ls -la target/wasm32-unknown-unknown/release/dispute_resolver.wasm
+          ls -la target/wasm32-unknown-unknown/release/invoice_registry.wasm
+          ls -la target/wasm32-unknown-unknown/release/payment_manager.wasm
           echo "WASM contract artifacts validated successfully."
 
       - name: Validate Deployment Package
