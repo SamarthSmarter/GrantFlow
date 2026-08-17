@@ -1,4 +1,4 @@
-export interface TransactionItem {
+﻿export interface TransactionItem {
   id: string; // generated UUID or Tx Hash
   grantId: string;
   type: 'submit' | 'release' | 'reject';
@@ -8,6 +8,18 @@ export interface TransactionItem {
   status: 'pending' | 'processing' | 'success' | 'failed' | 'cancelled';
   hash: string;
   network: 'testnet' | 'sandbox';
+}
+
+export interface TransactionStats {
+  total: number;
+  pending: number;
+  processing: number;
+  success: number;
+  failed: number;
+  cancelled: number;
+  submits: number;
+  releases: number;
+  rejects: number;
 }
 
 export function getTransactionHistory(): TransactionItem[] {
@@ -35,7 +47,7 @@ export function addTransaction(tx: Omit<TransactionItem, 'timestamp'>): Transact
     timestamp: Date.now(),
   };
   const history = getTransactionHistory();
-  history.unshift(newTx); // Newest first
+  history.unshift(newTx);
   saveTransactionHistory(history);
   return newTx;
 }
@@ -55,4 +67,36 @@ export function updateTransactionStatus(id: string, status: TransactionItem['sta
 
 export function clearTransactionHistory(): void {
   saveTransactionHistory([]);
+}
+
+/**
+ * Get all transactions for a specific grant ID
+ */
+export function getTransactionsByGrant(grantId: string): TransactionItem[] {
+  return getTransactionHistory().filter(tx => tx.grantId === grantId);
+}
+
+/**
+ * Get all transactions of a specific type
+ */
+export function getTransactionsByType(type: TransactionItem['type']): TransactionItem[] {
+  return getTransactionHistory().filter(tx => tx.type === type);
+}
+
+/**
+ * Get aggregate statistics for the transaction history
+ */
+export function getTransactionStats(): TransactionStats {
+  const history = getTransactionHistory();
+  return {
+    total: history.length,
+    pending: history.filter(t => t.status === 'pending').length,
+    processing: history.filter(t => t.status === 'processing').length,
+    success: history.filter(t => t.status === 'success').length,
+    failed: history.filter(t => t.status === 'failed').length,
+    cancelled: history.filter(t => t.status === 'cancelled').length,
+    submits: history.filter(t => t.type === 'submit').length,
+    releases: history.filter(t => t.type === 'release').length,
+    rejects: history.filter(t => t.type === 'reject').length,
+  };
 }
