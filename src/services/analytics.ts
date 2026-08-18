@@ -1,4 +1,4 @@
-import { getSandboxGrants, getSandboxEvents, type GrantContractState, type ContractEvent } from './contract';
+﻿import { getSandboxGrants, getSandboxEvents, type GrantContractState, type ContractEvent } from './contract';
 
 /**
  * Analytics service for GrantFlow
@@ -205,4 +205,54 @@ export function getGrowthRate(): { current: number; previous: number; growthPerc
     : currentPeriod > 0 ? 100 : 0;
 
   return { current: currentPeriod, previous: previousPeriod, growthPercent };
+}
+
+
+/**
+ * Get top grantors by total XLM committed across all grants
+ */
+export interface GrantorSummary {
+  grantorName: string;
+  grantorAddress: string;
+  totalXlm: number;
+  grantCount: number;
+  fundedCount: number;
+}
+
+export function getTopGrantors(limit: number = 5): GrantorSummary[] {
+  const grants = getSandboxGrants();
+  const grantorMap = new Map<string, GrantorSummary>();
+
+  for (const g of grants) {
+    const key = g.grantorAddress;
+    const existing = grantorMap.get(key);
+    const amount = parseFloat(g.amount) || 0;
+    if (existing) {
+      existing.totalXlm += amount;
+      existing.grantCount += 1;
+      if (g.status === 'funded') existing.fundedCount += 1;
+    } else {
+      grantorMap.set(key, {
+        grantorName: g.grantorName,
+        grantorAddress: g.grantorAddress,
+        totalXlm: amount,
+        grantCount: 1,
+        fundedCount: g.status === 'funded' ? 1 : 0,
+      });
+    }
+  }
+
+  return Array.from(grantorMap.values())
+    .sort((a, b) => b.totalXlm - a.totalXlm)
+    .slice(0, limit);
+}
+
+/**
+ * Compute the total value locked across all pending grants
+ */
+export function getTotalValueLocked(): number {
+  const grants = getSandboxGrants();
+  return grants
+    .filter(g => g.status === 'pending')
+    .reduce((sum, g) => sum + (parseFloat(g.amount) || 0), 0);
 }
