@@ -1,12 +1,21 @@
-export type NetworkMode = 'testnet' | 'sandbox';
+﻿export type NetworkMode = 'testnet' | 'sandbox';
 
 export interface NetworkConfig {
   mode: NetworkMode;
   horizonUrl: string;
   rpcUrl: string;
   networkPassphrase: string;
-  contractId: string; // Grant Registry Contract ID
-  milestoneEscrowContractId: string; // Milestone Escrow Contract ID
+  contractId: string;
+  milestoneEscrowContractId: string;
+  disputeResolverContractId: string;
+  invoiceRegistryContractId: string;
+}
+
+export interface ContractAddresses {
+  grantRegistry: string;
+  milestoneEscrow: string;
+  disputeResolver: string;
+  invoiceRegistry: string;
 }
 
 const DEFAULT_TESTNET_REGISTRY_ID = 'CC7VVKTGVSRNEZ4NGWL4AZBKXA6WIVPROT46J23M37FAZULUIYMS73UW';
@@ -27,6 +36,8 @@ export const TESTNET_CONFIG: NetworkConfig = {
   networkPassphrase: 'Test SDF Network ; September 2015',
   contractId: getValidTestnetContractId('grantflow_contract_id', DEFAULT_TESTNET_REGISTRY_ID),
   milestoneEscrowContractId: getValidTestnetContractId('grantflow_escrow_contract_id', DEFAULT_TESTNET_MILESTONE_ESCROW_ID),
+  disputeResolverContractId: getValidTestnetContractId('grantflow_dispute_contract_id', ''),
+  invoiceRegistryContractId: getValidTestnetContractId('grantflow_invoice_contract_id', ''),
 };
 
 export const SANDBOX_CONFIG: NetworkConfig = {
@@ -36,6 +47,8 @@ export const SANDBOX_CONFIG: NetworkConfig = {
   networkPassphrase: 'Test SDF Network ; September 2015',
   contractId: 'SANDBOX_GRANT_REGISTRY_ID',
   milestoneEscrowContractId: 'SANDBOX_MILESTONE_ESCROW_ID',
+  disputeResolverContractId: 'SANDBOX_DISPUTE_RESOLVER_ID',
+  invoiceRegistryContractId: 'SANDBOX_INVOICE_REGISTRY_ID',
 };
 
 export function getNetworkConfig(): NetworkConfig {
@@ -61,4 +74,24 @@ export function setContractIds(registryId: string, escrowId: string): void {
   TESTNET_CONFIG.contractId = registryId;
   TESTNET_CONFIG.milestoneEscrowContractId = escrowId;
   window.dispatchEvent(new Event('grantflow_contract_change'));
+}
+
+/**
+ * Get all deployed contract addresses for the current network mode.
+ */
+export function getContractAddresses(): ContractAddresses {
+  const config = getNetworkConfig();
+  return {
+    grantRegistry: config.contractId,
+    milestoneEscrow: config.milestoneEscrowContractId,
+    disputeResolver: config.disputeResolverContractId,
+    invoiceRegistry: config.invoiceRegistryContractId,
+  };
+}
+
+/**
+ * Returns true if the current network is in live testnet mode (not sandbox).
+ */
+export function isLiveNetwork(): boolean {
+  return getNetworkConfig().mode === 'testnet';
 }
