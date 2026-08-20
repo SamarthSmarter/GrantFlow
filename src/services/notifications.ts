@@ -1,4 +1,3 @@
-import { getSandboxGrants, getSandboxEvents, type GrantContractState, type ContractEvent } from './contract';
 
 /**
  * Notification severity levels

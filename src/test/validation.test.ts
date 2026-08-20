@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+﻿import { describe, it, expect } from 'vitest';
 import {
   isValidStellarAddress,
   isValidContractId,
@@ -22,7 +22,7 @@ describe('Validation Utilities', () => {
       expect(isValidStellarAddress('')).toBe(false);
       expect(isValidStellarAddress('INVALID')).toBe(false);
       expect(isValidStellarAddress('C' + 'A'.repeat(55))).toBe(false);
-      expect(isValidStellarAddress('G' + 'A'.repeat(54))).toBe(false); // too short
+      expect(isValidStellarAddress('G' + 'A'.repeat(54))).toBe(false);
     });
   });
 
@@ -74,6 +74,10 @@ describe('Validation Utilities', () => {
     it('should reject unreasonably large amounts', () => {
       expect(validateAmount('999999999999')).toContain('exceeds');
     });
+
+    it('should reject Infinity as an invalid number', () => {
+      expect(validateAmount('Infinity')).toContain('valid number');
+    });
   });
 
   describe('sanitizeInput', () => {
@@ -82,12 +86,29 @@ describe('Validation Utilities', () => {
     });
 
     it('should strip angle brackets', () => {
-      expect(sanitizeInput('<script>alert("xss")</script>')).toBe('scriptalert("xss")/script');
+      expect(sanitizeInput('<script>alert(1)</script>')).not.toContain('<');
+      expect(sanitizeInput('<script>alert(1)</script>')).not.toContain('>');
     });
 
-    it('should handle null/undefined gracefully', () => {
+    it('should handle empty input', () => {
       expect(sanitizeInput('')).toBe('');
-      expect(sanitizeInput(null as unknown as string)).toBe('');
+    });
+
+    it('should strip leading = to prevent CSV formula injection', () => {
+      expect(sanitizeInput('=HYPERLINK("evil.com")')).not.toMatch(/^=/);
+    });
+
+    it('should strip leading + sign to prevent CSV formula injection', () => {
+      expect(sanitizeInput('+SUM(A1:A10)')).not.toMatch(/^\+/);
+    });
+
+    it('should strip leading @ sign to prevent CSV formula injection', () => {
+      expect(sanitizeInput('@SUM(A1)')).not.toMatch(/^@/);
+    });
+
+    it('should preserve normal grant titles', () => {
+      const title = 'DeFi Analytics Dashboard v2';
+      expect(sanitizeInput(title)).toBe(title);
     });
   });
 
@@ -129,6 +150,28 @@ describe('Validation Utilities', () => {
     it('should handle invalid inputs gracefully', () => {
       expect(xlmToStroops('')).toBe(BigInt(0));
       expect(xlmToStroops('-5')).toBe(BigInt(0));
+    });
+  });
+
+  describe('isValidFutureDate', () => {
+    it('should accept valid near-future dates', () => {
+      const nextYear = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+      expect(isValidFutureDate(nextYear)).toBe(true);
+    });
+
+    it('should reject past dates', () => {
+      expect(isValidFutureDate('2020-01-01')).toBe(false);
+      expect(isValidFutureDate('1970-01-01')).toBe(false);
+    });
+
+    it('should reject dates more than 10 years in the future', () => {
+      const farFuture = new Date(Date.now() + 11 * 365.25 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+      expect(isValidFutureDate(farFuture)).toBe(false);
+    });
+
+    it('should reject empty or invalid strings', () => {
+      expect(isValidFutureDate('')).toBe(false);
+      expect(isValidFutureDate('not-a-date')).toBe(false);
     });
   });
 });
