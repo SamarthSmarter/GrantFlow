@@ -148,6 +148,19 @@ Holds XLM in a secure vault and releases it only on instruction from the Registr
 
 ---
 
+## Deployment
+
+A PowerShell script is provided to automate the compilation and deployment of all 5 Soroban smart contracts to the testnet.
+
+1. Ensure the Stellar CLI is installed and your `admin` identity is configured and funded on testnet.
+2. Run the deployment script:
+   ```powershell
+   ./scripts/deploy.ps1
+   ```
+3. Update `src/services/network.ts` with the new contract IDs printed in the console output.
+
+---
+
 ## Tech Stack
 
 | Layer | Technology | Purpose |
