@@ -26,8 +26,8 @@ This repository is optimized for the **Level 4 Production-Ready MVP** submission
 - ✅ **Contract Deployment Addresses:** Verified and deployed on Testnet (See [Contract Addresses](#contract-addresses--transactions)).
 - ✅ **Mobile Responsive UI:** Verified across iPhone and Android dimensions using Tailwind CSS. (See [Screenshots](#submission-screenshots)).
 - ✅ **Analytics & Monitoring Setup:** Global `ErrorBoundary.tsx` implemented, and telemetry simulated via `src/utils/logger.ts`. (See [Screenshots](#submission-screenshots)).
-- ✅ **Basic User Feedback Summary:** [👉 Insert Spreadsheet Link Here]
-- ✅ **User Onboarding Form:** [👉 Insert Google Form Link Here]
+- ✅ **Basic User Feedback Summary:** [View User Feedback Spreadsheet](https://docs.google.com/spreadsheets/d/1ro-wB7qonx8vnBjNwz35GvzrW1cIkGjEbGQ1NtnfT7U/edit?usp=sharing)
+- ✅ **User Onboarding Form:** [View Google Form](https://forms.gle/Pm4NherqUxszDAKb7)
 
 ---
 
