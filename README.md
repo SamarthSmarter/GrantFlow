@@ -15,22 +15,6 @@
 
 ---
 
-## 🏆 Level 4 - Green Belt Submission Checklist
-
-This repository is optimized for the **Level 4 Production-Ready MVP** submission.
-
-- ✅ **Public GitHub Repository:** [Source Code](https://github.com/SamarthSmarter/GrantFlow)
-- ✅ **Minimum 15+ Commits:** Repository contains 71+ meaningful commits representing a complete audit and development sprint.
-- ✅ **Live Demo Link:** [GrantFlow on Netlify](https://grantflow-stellar.netlify.app/)
-- ✅ **Demo Video Link:** [👉 Insert Demo Video Link Here]
-- ✅ **Contract Deployment Addresses:** Verified and deployed on Testnet (See [Contract Addresses](#contract-addresses--transactions)).
-- ✅ **Mobile Responsive UI:** Verified across iPhone and Android dimensions using Tailwind CSS. (See [Screenshots](#submission-screenshots)).
-- ✅ **Analytics & Monitoring Setup:** Global `ErrorBoundary.tsx` implemented, and telemetry simulated via `src/utils/logger.ts`. (See [Screenshots](#submission-screenshots)).
-- ✅ **Basic User Feedback Summary:** [View User Feedback Spreadsheet](https://docs.google.com/spreadsheets/d/1ro-wB7qonx8vnBjNwz35GvzrW1cIkGjEbGQ1NtnfT7U/edit?usp=sharing)
-- ✅ **User Onboarding Form:** [View Google Form](https://forms.gle/Pm4NherqUxszDAKb7)
-
----
-
 ## Table of Contents
 
 1. [Problem Statement](#problem-statement)
@@ -354,6 +338,22 @@ stellar contract deploy \
 - Production-ready architecture with Vite chunk-splitting and strict network config.
 - Mobile responsive frontend.
 - Comprehensive test coverage for React components and contract validation logic.
+
+---
+
+## Level 4 - Green Belt Submission Checklist
+
+This repository is optimized for the **Level 4 Production-Ready MVP** submission.
+
+- **Public GitHub Repository:** [Source Code](https://github.com/SamarthSmarter/GrantFlow)
+- **Minimum 15+ Commits:** Repository contains 71+ meaningful commits representing a complete audit and development sprint.
+- **Live Demo Link:** [GrantFlow on Netlify](https://grantflow-stellar.netlify.app/)
+- **Demo Video Link:** [Insert Demo Video Link Here]
+- **Contract Deployment Addresses:** Verified and deployed on Testnet (See [Contract Addresses](#contract-addresses--transactions)).
+- **Mobile Responsive UI:** Verified across iPhone and Android dimensions using Tailwind CSS. (See [Screenshots](#submission-screenshots)).
+- **Analytics & Monitoring Setup:** Global `ErrorBoundary.tsx` implemented, and telemetry simulated via `src/utils/logger.ts`. (See [Screenshots](#submission-screenshots)).
+- **Basic User Feedback Summary:** [View User Feedback Spreadsheet](https://docs.google.com/spreadsheets/d/1ro-wB7qonx8vnBjNwz35GvzrW1cIkGjEbGQ1NtnfT7U/edit?usp=sharing)
+- **User Onboarding Form:** [View Google Form](https://forms.gle/Pm4NherqUxszDAKb7)
 
 ---
 
