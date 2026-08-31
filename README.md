@@ -24,8 +24,8 @@ This repository is optimized for the **Level 4 Production-Ready MVP** submission
 - ✅ **Live Demo Link:** [GrantFlow on Netlify](https://grantflow-stellar.netlify.app/)
 - ✅ **Demo Video Link:** [👉 Insert Demo Video Link Here]
 - ✅ **Contract Deployment Addresses:** Verified and deployed on Testnet (See [Contract Addresses](#contract-addresses--transactions)).
-- ✅ **Mobile Responsive UI:** Verified across iPhone and Android dimensions using Tailwind CSS.
-- ✅ **Analytics & Monitoring Setup:** Global `ErrorBoundary.tsx` implemented, and telemetry simulated via `src/utils/logger.ts`.
+- ✅ **Mobile Responsive UI:** Verified across iPhone and Android dimensions using Tailwind CSS. (See [Screenshots](#submission-screenshots)).
+- ✅ **Analytics & Monitoring Setup:** Global `ErrorBoundary.tsx` implemented, and telemetry simulated via `src/utils/logger.ts`. (See [Screenshots](#submission-screenshots)).
 - ✅ **Basic User Feedback Summary:** [👉 Insert Spreadsheet Link Here]
 - ✅ **User Onboarding Form:** [👉 Insert Google Form Link Here]
 
@@ -172,6 +172,21 @@ As part of the push to production-readiness, the following architectural upgrade
 2. **Monitoring & Analytics Hook:** Implemented `trackEvent` and `trackUserOnboarding` in the logging layer (`src/utils/logger.ts`) for telemetry.
 3. **Advanced Input Validation:** Guards against CSV injection, limits deadline bounds to a strict 10-year horizon, and prevents `Infinity` float precision bypasses.
 4. **Client-side Rate Limiting:** Prevents users from accidentally spamming smart contract interactions on Testnet.
+
+---
+
+## Submission Screenshots
+
+> **Note to Reviewers:** The following screenshots demonstrate the core requirements for the Level 4 Green Belt MVP.
+
+### 1. Product UI (Dashboard)
+*(👉 Replace this placeholder text with your actual dashboard screenshot: `![Dashboard UI](./assets/dashboard.png)`)*
+
+### 2. Mobile Responsive Design
+*(👉 Replace this placeholder text with your actual mobile UI screenshot: `![Mobile UI](./assets/mobile.png)`)*
+
+### 3. Analytics & Monitoring Setup
+*(👉 Replace this placeholder text with your actual Sentry/Logger/Analytics screenshot: `![Analytics Setup](./assets/analytics.png)`)*
 
 ---
 
