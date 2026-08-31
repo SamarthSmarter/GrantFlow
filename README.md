@@ -159,21 +159,6 @@ As part of the push to production-readiness, the following architectural upgrade
 
 ---
 
-## Submission Screenshots
-
-> **Note to Reviewers:** The following screenshots demonstrate the core requirements for the Level 4 Green Belt MVP.
-
-### 1. Product UI (Dashboard)
-*(👉 Replace this placeholder text with your actual dashboard screenshot: `![Dashboard UI](./assets/dashboard.png)`)*
-
-### 2. Mobile Responsive Design
-*(👉 Replace this placeholder text with your actual mobile UI screenshot: `![Mobile UI](./assets/mobile.png)`)*
-
-### 3. Analytics & Monitoring Setup
-*(👉 Replace this placeholder text with your actual Sentry/Logger/Analytics screenshot: `![Analytics Setup](./assets/analytics.png)`)*
-
----
-
 ## Deployment
 
 A PowerShell script is provided to automate the compilation and deployment of all 5 Soroban smart contracts to the testnet.
